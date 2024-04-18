@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  trucomm-dev:
+    image: trucomm:1.0
+    env_file:
+      - .env.dev
+    ports:
+      -8000:8000
+    extra-host:
+    - "mysql.database.com:127.0.0.1"

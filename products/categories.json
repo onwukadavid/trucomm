@@ -1,0 +1,171 @@
+[
+  {
+    "title": "Women's",
+    "slug": "womens",
+    "subcategories": [
+      {
+        "title": "Clothing",
+        "slug": "womens-clothing",
+        "subcategories": [
+          {"title": "Dresses", "slug": "womens-dresses"},
+          {"title": "Tops", "slug": "womens-tops"},
+          {"title": "Skirts", "slug": "womens-skirts"}
+        ]
+      },
+      {
+        "title": "Footwear",
+        "slug": "womens-footwear",
+        "subcategories": [
+          {"title": "Sneakers", "slug": "womens-sneakers"},
+          {"title": "Boots", "slug": "womens-boots"},
+          {"title": "Heels", "slug": "womens-heels"}
+        ]
+      },
+      {
+        "title": "Underwear & Loungewear",
+        "slug": "womens-underwear-loungewear",
+        "subcategories": [
+          {"title": "Underwear", "slug": "womens-underwear"},
+          {"title": "Sleepwear", "slug": "womens-sleepwear"},
+          {"title": "Bras", "slug": "womens-bras"}
+        ]
+      },
+      {
+        "title": "Activewear",
+        "slug": "womens-activewear",
+        "subcategories": [
+          {"title": "Tops", "slug": "womens-activewear-tops"},
+          {"title": "Bottoms", "slug": "womens-activewear-bottoms"}
+        ]
+      },
+      {"title": "Health & Beauty", "slug": "womens-health-beauty"}
+    ]
+  },
+  {
+    "title": "Men's",
+    "slug": "mens",
+    "subcategories": [
+      {
+        "title": "Clothing",
+        "slug": "mens-clothing",
+        "subcategories": [
+          {"title": "Shirts", "slug": "mens-shirts"},
+          {"title": "Pants", "slug": "mens-pants"},
+          {"title": "Jackets", "slug": "mens-jackets"}
+        ]
+      },
+      {
+        "title": "Footwear",
+        "slug": "mens-footwear",
+        "subcategories": [
+          {"title": "Sneakers", "slug": "mens-sneakers"},
+          {"title": "Boots", "slug": "mens-boots"},
+          {"title": "Dress Shoes", "slug": "mens-dress-shoes"}
+        ]
+      },
+      {
+        "title": "Underwear & Loungewear",
+        "slug": "mens-underwear-loungewear",
+        "subcategories": [
+          {"title": "Underwear", "slug": "mens-underwear"},
+          {"title": "Sleepwear", "slug": "mens-sleepwear"}
+        ]
+      },
+      {
+        "title": "Activewear",
+        "slug": "mens-activewear",
+        "subcategories": [
+          {"title": "Tops", "slug": "mens-activewear-tops"},
+          {"title": "Bottoms", "slug": "mens-activewear-bottoms"}
+        ]
+      },
+      {"title": "Watches", "slug": "mens-watches"}
+    ]
+  },
+  {
+    "title": "Kids'",
+    "slug": "kids",
+    "subcategories": [
+      {
+        "title": "Boys' Clothing",
+        "slug": "boys-clothing",
+        "subcategories": [
+          {"title": "Tops", "slug": "boys-tops"},
+          {"title": "Bottoms", "slug": "boys-bottoms"},
+          {"title": "Jackets", "slug": "boys-jackets"}
+        ]
+      },
+      {
+        "title": "Girls' Clothing",
+        "slug": "girls-clothing",
+        "subcategories": [
+          {"title": "Dresses", "slug": "girls-dresses"},
+          {"title": "Tops", "slug": "girls-tops"},
+          {"title": "Bottoms", "slug": "girls-bottoms"},
+          {"title": "Jackets", "slug": "girls-jackets"}
+        ]
+      },
+      {
+        "title": "Boys' Footwear",
+        "slug": "boys-footwear",
+        "subcategories": []
+      },
+      {
+        "title": "Girls' Footwear",
+        "slug": "girls-footwear",
+        "subcategories": []
+      },
+      {
+        "title": "Kids' Underwear & Loungewear",
+        "slug": "kids-underwear-loungewear",
+        "subcategories": []
+      },
+      {
+        "title": "Kids' Activewear",
+        "slug": "kids-activewear",
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "title": "Accessories",
+    "slug": "accessories",
+    "subcategories": [
+      {
+        "title": "Women's Accessories",
+        "slug": "womens-accessories",
+        "subcategories": [
+          {"title": "Handbags", "slug": "womens-handbags"},
+          {"title": "Jewelry", "slug": "womens-jewelry"},
+          {"title": "Hats & Caps", "slug": "womens-hats-caps"},
+          {"title": "Scarves & Wraps", "slug": "womens-scarves-wraps"}
+        ]
+      },
+      {
+        "title": "Men's Accessories",
+        "slug": "mens-accessories",
+        "subcategories": [
+          {"title": "Bags", "slug": "mens-bags"},
+          {"title": "Jewelry", "slug": "mens-jewelry"},
+          {"title": "Hats & Caps", "slug": "mens-hats-caps"},
+          {"title": "Scarves & Wraps", "slug": "mens-scarves-wraps"}
+        ]
+      },
+      {
+        "title": "Kids' Accessories",
+        "slug": "kids-accessories",
+        "subcategories": [
+          {"title": "Hats & Caps", "slug": "kids-hats-caps"}
+        ]
+      }
+    ]
+  },
+  {"title": "Shoes", "slug": "shoes", "subcategories": []},
+  {"title": "Watches", "slug": "watches", "subcategories": []},
+  {"title": "Jewellery", "slug": "jewellery", "subcategories": []},
+  {"title": "Sports", "slug": "sports", "subcategories": []},
+  {"title": "Sleepwear", "slug": "sleepwear", "subcategories": []},
+  {"title": "Seasonal Wear", "slug": "seasonal-wear", "subcategories": []},
+  {"title": "Ethnic Wear", "slug": "ethnic-wear", "subcategories": []},
+  {"title": "Baby Clothing", "slug": "baby-clothing", "subcategories": []}
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "title": "Men",
+    "slug": "men",
+    "subcategories": [
+      {"title": "Clothing", "slug": "men-clothing"},
+      {"title": "Shoes", "slug": "men-shoes"}
+    ]
+  },
+  {
+    "title": "Women",
+    "slug": "women",
+    "subcategories": [
+      {"title": "Clothing", "slug": "women-clothing"},
+      {"title": "Shoes", "slug": "women-shoes"}
+    ]
+  },
+  {
+    "title": "Kids",
+    "slug": "kids",
+    "subcategories": [
+      {"title": "Clothing", "slug": "kids-clothing"},
+      {"title": "Shoes", "slug": "kids-shoes"}
+    ]
+  },
+  {
+    "title": "Accessories",
+    "slug": "accessories",
+    "subcategories": []
+  }
+]

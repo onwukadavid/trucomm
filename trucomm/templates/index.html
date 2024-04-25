@@ -177,7 +177,7 @@
                             </div>
                         </li>
                         <li class="dropdown dropdown-mega-menu">
-                            <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Products</a>
+                            <a class="dropdown-toggle nav-link" href="{% url 'products:all-products' %}" data-bs-toggle="dropdown">Products</a>
                             <div class="dropdown-menu">
                                 <ul class="mega-menu d-lg-flex">
                                     {% for category in categories %}

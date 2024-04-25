@@ -7,6 +7,7 @@ class Category(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     parent_category = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='subcategories')
+    is_visible = models.BooleanField(default=False)
 
 
     # objects = CategoryManager()
@@ -34,8 +35,7 @@ class Product(models.Model):
     price = models.FloatField()
     # image = models.ImageField('products') # use ImageField For production
     image = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
 
     def save(self, *args, **kwargs):
         if not self.slug:

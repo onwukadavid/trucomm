@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from cloudinary.models import CloudinaryField
 from products.managers import CategoryManager
+from django.utils import timezone
 
 class Category(models.Model):
     title = models.CharField(max_length=255)
@@ -36,6 +37,8 @@ class Product(models.Model):
     # image = models.ImageField('products') # use ImageField For production
     image = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
+    created_at = models.DateTimeField(verbose_name='created at', default=timezone.now)
+    updated_at = models.DateTimeField(verbose_name='updated at', auto_now=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

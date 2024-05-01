@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from products.models import Category, Product
+from django.shortcuts import get_object_or_404
 import requests
 from pprint import pprint
 import json
@@ -8,9 +9,18 @@ import os
 
 def home(request):
     context = {}
-    categories = Category.objects.filter(parent_category=None)
+    categories_list = Category.objects.filter(parent_category=None).values('id', 'title')[:4]
+    categories_id = [categories['id'] for categories in categories_list]
+    categories_title = [categories['title'] for categories in categories_list]
 
-    context['categories'] = categories[:4]
+    subcategories_list = Category.objects.filter(parent_category__in=categories_id).values('parent_category_id__title','title')
+
+    categories = {}
+    for category in categories_title:
+        categories.setdefault(category, [])
+        categories[category] += [new_subcat['title'] for new_subcat in subcategories_list if new_subcat['parent_category_id__title'] == category]
+
+    context['categories'] = categories
 
     return render(request, 'index.html', context=context)
 
@@ -19,8 +29,26 @@ def products(request):
     products = Product.objects.all()
 
     context = {'products':products}
+    
+    #TODO: add pagination to products view and template
      
     return render(request, 'products.html', context=context)
+
+
+def product_detail(request, category, slug):
+
+    # declare empty context
+    context = {}
+
+    # get product from db
+    product = get_object_or_404(Product, category__title=category, slug=slug)
+
+    # add product to context
+    context['product'] = product
+
+    # return product detail template
+    
+    return render(request, 'product-detail.html', context=context)
 
 
 def populate_categories(request):

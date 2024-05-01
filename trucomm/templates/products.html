@@ -120,7 +120,7 @@
                 </div> 
                 <div class="row shop_container list">
                     <!-- here -->
-                    {% for product in products %}
+                    {% for product in page_obj %}
                         <div class="col-lg-3 col-md-4 col-6">
                             <div class="product">
                                 <div class="product_img">
@@ -174,13 +174,30 @@
                         </div>
                     {% endfor %}
                 </div>
-        		<div class="row">
+                <div class="row">
                     <div class="col-12">
                         <ul class="pagination mt-3 justify-content-center pagination_style1">
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#"><i class="linearicons-arrow-right"></i></a></li>
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1"> first</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                                </li>
+                            {% endif %}
+                
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                            </li>
+                
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">last</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

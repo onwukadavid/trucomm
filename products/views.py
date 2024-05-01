@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from products.models import Category, Product
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 import requests
 from pprint import pprint
 import json
@@ -29,10 +30,13 @@ def products(request):
     products = Product.objects.all()
 
     context = {'products':products}
-    
-    #TODO: add pagination to products view and template
+
+    paginator = Paginator(products, 10)
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
+    context['page_obj'] = page_obj
      
-    return render(request, 'products.html', context=context)
+    return render(request, 'products.html', context=context, )
 
 
 def product_detail(request, category, slug):

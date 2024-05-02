@@ -36,7 +36,7 @@ def products(request):
     page_obj = paginator.get_page(page_num)
     context['page_obj'] = page_obj
      
-    return render(request, 'products.html', context=context, )
+    return render(request, 'products/products.html', context=context, )
 
 
 def product_detail(request, category, slug):
@@ -52,7 +52,7 @@ def product_detail(request, category, slug):
 
     # return product detail template
     
-    return render(request, 'product-detail.html', context=context)
+    return render(request, 'products/product-detail.html', context=context)
 
 
 def populate_categories(request):

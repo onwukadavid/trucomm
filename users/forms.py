@@ -22,7 +22,7 @@ class RegisterForm(forms.Form):
             raise ValidationError('User with this email already exists')
         return email
 
-    def clean(self):
+    def clean_password(self):
         cleaned_data = super().clean()
         password = cleaned_data['passwword']
         password2 = cleaned_data['confirm_password']

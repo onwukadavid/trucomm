@@ -128,6 +128,11 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# SESSION SETTINGS
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 3600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 
 # CLOUDINARY STORAGE
 cloudinary.config( 

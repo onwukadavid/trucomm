@@ -3,30 +3,30 @@ from django.core.exceptions import ValidationError
 from users.models import User
 
 class RegisterForm(forms.Form):
-    name = forms.CharField(min_length=3, max_length=255)
-    username = forms.CharField(min_length=3, max_length=255)
-    email = forms.EmailField(max_length=255)
-    password = forms.PasswordInput()
+    # name = forms.CharField(min_length=3, max_length=255)
+    username = forms.CharField(min_length=5, max_length=255, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Your username'}))
+    email = forms.EmailField(max_length=255, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Your Email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'password'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Confirm password'}))
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        user = User.objects.get(username=username)
-        if user.objects.exists():
-            raise ValidationError('User with this username already exists')
+        user = User.objects.filter(username=username)
+        if user.exists():
+            raise ValidationError('This username already exists')
         return username
     
     def clean_email(self):
         email = self.cleaned_data['email']
-        user = User.objects.get(email=email)
-        if user.objects.exists():
-            raise ValidationError('User with this email already exists')
+        user = User.objects.filter(email=email)
+        if user.exists():
+            raise ValidationError('This email already exists')
         return email
 
-    def clean_password(self):
-        cleaned_data = super().clean()
-        password = cleaned_data['passwword']
-        password2 = cleaned_data['confirm_password']
+    def clean_confirm_password(self):
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['confirm_password']
 
-        if password != password2:
-            raise ValidationError('The passwords do not match')
-        return cleaned_data
+        if password and password2 and password2 != password:
+            raise ValidationError('Passwords do not match')
+        return password2

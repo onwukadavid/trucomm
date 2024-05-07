@@ -47,6 +47,13 @@
 <title>{% block title %}{% endblock title %}</title>
 </head>
 
+<style>
+    .errorlist{
+        font-size: small;
+        color: red;
+    }
+</style>
+
 <body>
     <!-- START HEADER -->
     <header class="header_wrap fixed-top header_with_topbar">
@@ -79,7 +86,12 @@
                            	<ul class="header_list">
                             	<li><a href="compare.html"><i class="ti-control-shuffle"></i><span>Compare</span></a></li>
                                 <li><a href="wishlist.html"><i class="ti-heart"></i><span>Wishlist</span></a></li>
+
+                                {% if not request.user.is_authenticated %}
                                 <li><a href="{% url 'account:sign-in' %}"><i class="ti-user"></i><span>Login</span></a></li>
+                                {% else %}
+                                <li><a href="{% url 'account:sign-out' %}"><i class="ti-user"></i><span>Logout</span></a></li>
+                                {% endif %}
     						</ul>
                         </div>
                     </div>

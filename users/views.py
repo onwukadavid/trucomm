@@ -32,6 +32,12 @@ def signin(request):
         request.session.delete_test_cookie()
         # add session after logging in user
         request.session.setdefault('user', user.username)
+
+        # check if next is in POST Query parameter
+        next = request.POST.get('next', False)
+        if next:
+            return redirect(next)
+        
         return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
     else:    
         user = request.session.get('user', False)
@@ -39,6 +45,12 @@ def signin(request):
             return redirect(reverse('dashboard:my-dashboard'))
         
     request.session.set_test_cookie()
+
+    # check if next is in querystring
+    if request.GET.get('next', False):
+        next = request.GET.get('next', False)
+        context['next'] = next
+
     return render(request, 'users/signin.html', context)
 
 def register(request):
@@ -69,6 +81,11 @@ def register(request):
             # add session after logging in user
             request.session.setdefault('user', user.username)
 
+            # check if next is in POST Query parameter
+            next = request.POST.get('next', False)
+            if next:
+                return redirect(next)
+
             return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
     else:
         user = request.session.get('user', False)
@@ -78,6 +95,11 @@ def register(request):
         form = RegisterForm()
 
     request.session.set_test_cookie()
+
+    # check if next is in querystring
+    if request.GET.get('next', False):
+        next = request.GET.get('next', False)
+        context['next'] = next
     context['form'] = form
 
     return render(request, 'users/signup.html', context)

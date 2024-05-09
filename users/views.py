@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
-
+from django.conf import settings
 
 def signin(request):
     context = {}
@@ -32,6 +32,11 @@ def signin(request):
         request.session.delete_test_cookie()
         # add session after logging in user
         request.session.setdefault('user', user.username)
+
+        #persist session for a day 'if remember me' is checked
+        if 'checkbox' in request.POST.keys():
+            settings.SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+            settings.SESSION_COOKIE_AGE = 86400
 
         # check if next is in POST Query parameter
         next = request.POST.get('next', False)
@@ -75,6 +80,8 @@ def register(request):
             user.set_password(password)
 
             user.save()
+
+            #TODO: Send verification email and OTP upon completing registeration.
 
             login(request, user)
 

@@ -5,7 +5,7 @@ from users.models import User
 from django.contrib.auth import login, authenticate
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
 def signin(request):
@@ -32,11 +32,11 @@ def signin(request):
         request.session.delete_test_cookie()
         # add session after logging in user
         request.session.setdefault('user', user.username)
-        return HttpResponseRedirect(reverse('account:my-dashboard', args=[user.username])) # redirect to user dashboard
+        return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
     else:    
         user = request.session.get('user', False)
         if user:
-            return redirect('account:my-dashboard', args=[user.username])
+            return redirect(reverse('dashboard:my-dashboard'))
         
     request.session.set_test_cookie()
     return render(request, 'users/signin.html', context)
@@ -69,11 +69,11 @@ def register(request):
             # add session after logging in user
             request.session.setdefault('user', user.username)
 
-            return HttpResponseRedirect(reverse('account:my-dashboard', args=[username])) # redirect to user dashboard
+            return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
     else:
         user = request.session.get('user', False)
         if user:
-            return redirect('account:my-dashboard')
+            return redirect(reverse('dashboard:my-dashboard'))
         
         form = RegisterForm()
 
@@ -84,10 +84,6 @@ def register(request):
 
 def sign_out(request):
     #use flush instead of del
-    del request.session['user']
+    logout(request)
 
     return redirect('account:sign-in')
-
-# @login_required
-def dashboard(request, username):
-    return render(request, 'users/dashboard.html')

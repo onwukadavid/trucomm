@@ -1,12 +1,12 @@
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
+from django.core.exceptions import ValidationError
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from users.forms import RegisterForm
 from users.models import User
-from django.contrib.auth import login, authenticate
-from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
-from django.contrib.auth import logout
-from django.conf import settings
 
 def signin(request):
     context = {}
@@ -23,10 +23,8 @@ def signin(request):
         user = authenticate(request, email=email, password=password)
         if not user:
             error_message = 'Incorrect email/password'
-            context['error'] = error_message
-            context['email'] = email
+            messages.error(request, error_message)
             return render(request, 'users/signin.html', context)
-            # raise ValidationError(error_message)
         
         login(request, user)
         request.session.delete_test_cookie()
@@ -58,6 +56,8 @@ def signin(request):
 
     return render(request, 'users/signin.html', context)
 
+
+#TODO: Send verification email and OTP upon completing registeration.
 def register(request):
     context = {}
     if request.method == 'POST':
@@ -80,8 +80,6 @@ def register(request):
             user.set_password(password)
 
             user.save()
-
-            #TODO: Send verification email and OTP upon completing registeration.
 
             login(request, user)
 

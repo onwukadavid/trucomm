@@ -136,10 +136,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #EXTRA
 LOGIN_URL = '/account/sign-in'
 
-
 # CLOUDINARY STORAGE
 cloudinary.config( 
   	cloud_name = os.environ.get("CLOUD_NAME"),
   	api_key = os.environ.get("CLOUDINARY_API_KEY"),
   	api_secret = os.environ.get("CLOUDINARY_API_SECRET")
 )
+
+# EMAIL CONFIG
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

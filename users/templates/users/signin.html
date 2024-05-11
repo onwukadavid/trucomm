@@ -39,7 +39,16 @@
                         </div>
                         <form method="post">
                             {% csrf_token %}
-                            {{error}}
+                            {% if messages %}
+                                <div class="messages">
+                                    {% for message in messages %}
+                                        <div style="background-color: red; color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            <!-- {{error}} -->
                             <div class="form-group mb-3">
                                 <input type="text" required="" class="form-control" name="email" placeholder="Your Email" value="{{ email }}">
                             </div>

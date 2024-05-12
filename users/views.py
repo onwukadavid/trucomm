@@ -1,12 +1,24 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from users.forms import RegisterForm
 from users.models import User
+
+
+def send_activation_email(request, user):
+    current_site = get_current_site(request)
+    email_subject = 'Activate yoyur account'
+    email_body = ...
+    receipient = ...
+    sender = ...
+
+    send_mail()
 
 def signin(request):
     context = {}
@@ -81,7 +93,15 @@ def register(request):
 
             user.save()
 
-            login(request, user)
+            #TODO: Redirect to signin pafge with a message to check email for vification link
+            if not user.is_verified:
+                messages.success(request, f"A confirmation email has been sent to '{user.email}'")
+                return redirect(reverse('account:sign-in'))
+
+            #TODO: Send verification email to user
+            send_activation_email(request, user)
+
+            login(request, user)  #DO NOT LOG IN USER AFTER SIGNUP, VERIFY EMAIL
 
             # add session after logging in user
             request.session.setdefault('user', user.username)

@@ -14,6 +14,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from users.forms import RegisterForm
 from users.utils import generate_token
 
+import os
+
 User = get_user_model()
 
 #TODO: Confirm this works
@@ -27,8 +29,9 @@ def send_activation_email(request, user):
         'token':generate_token.make_token(user)
         })
 
-    send_mail(subject=email_subject, message=email_body, from_email=settings.EMAIL_FROM_USER, recipient_list=[user.email])
+    send_mail(subject=email_subject, message=email_body, from_email=settings.EMAIL_FROM_USER, recipient_list=[user.email], html_message=email_body)
 
+#TODO: NOT WORKING
 def signin(request):
     context = {}
     if request.method =='POST':
@@ -86,6 +89,7 @@ def signin(request):
 
 #TODO: Send verification email and OTP upon completing registeration.
 def register(request):
+    # print(os.environ.get("EMAIL_FROM_EMAIL"))
     context = {}
     if request.method == 'POST':
         if not request.session.test_cookie_worked():
@@ -95,7 +99,7 @@ def register(request):
         
         request.session.delete_test_cookie()
         form = RegisterForm(request.POST)
-        print(request.POST)
+        # print(request.POST)
         # check if form is valid
         if form.is_valid():
             # name = form.cleaned_data['name']
@@ -111,7 +115,7 @@ def register(request):
             #TODO: Redirect to signin pafge with a message to check email for vification link
 
 
-            #TODO: Send verification email to user
+            #TODO: Slow. Use Threading to move this to the background
             send_activation_email(request, user)
 
 
@@ -161,10 +165,12 @@ def activate_user(request, uidb64, token):
     except Exception as e:
         user = None
 
+    print(user)
     if user and generate_token.check_token(user, token):
         user.is_verified = True
         user.is_active = True
-        user.email_verified_at = timezone.now
+        user.email_verified_at = timezone.now()
+        user.save()
 
         messages.success(request, 'Your email has been verified! You can now sign in')
 

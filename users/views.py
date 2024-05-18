@@ -68,7 +68,7 @@ def signin(request):
     return render(request, 'users/signin.html', context)
 
 
-#TODO: OTP upon completing registeration.
+#TODO: OTP upon completing registeration, add password validation.
 def register(request):
     context = {}
     if request.method == 'POST':

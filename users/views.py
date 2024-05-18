@@ -1,37 +1,18 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 from users.forms import RegisterForm
-from users.utils import generate_token
-
-import os
+from users.utils import generate_token, SendEmail
 
 User = get_user_model()
 
-#TODO: Confirm this works
-def send_activation_email(request, user):
-    current_site = get_current_site(request)
-    email_subject = 'Activate your account'
-    email_body = render_to_string('users/email_verification_template.html', {
-        'user':user,
-        'domain':current_site,
-        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-        'token':generate_token.make_token(user)
-        })
-
-    send_mail(subject=email_subject, message=email_body, from_email=settings.EMAIL_FROM_USER, recipient_list=[user.email], html_message=email_body)
-
-#TODO: NOT WORKING
 def signin(request):
     context = {}
     if request.method =='POST':
@@ -46,14 +27,14 @@ def signin(request):
 
         user = authenticate(request, email=email, password=password)
 
-        if not user.is_verified:
-            messages.error(request, 'Email is not verified. Please check your inbox or spam')
-            return render(request, 'users/signin.html')
-        
         if not user:
             error_message = 'Incorrect email/password'
             messages.error(request, error_message)
             return render(request, 'users/signin.html', context)
+        
+        if not user.is_verified:
+            messages.error(request, 'Email is not verified. Please check your inbox or spam')
+            return render(request, 'users/signin.html')
         
         login(request, user)
 
@@ -71,7 +52,7 @@ def signin(request):
         if next:
             return redirect(next)
         
-        return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
+        return HttpResponseRedirect(reverse('dashboard:my-dashboard'))
     else:    
         user = request.session.get('user', False)
         if user:
@@ -87,9 +68,8 @@ def signin(request):
     return render(request, 'users/signin.html', context)
 
 
-#TODO: Send verification email and OTP upon completing registeration.
+#TODO: OTP upon completing registeration.
 def register(request):
-    # print(os.environ.get("EMAIL_FROM_EMAIL"))
     context = {}
     if request.method == 'POST':
         if not request.session.test_cookie_worked():
@@ -99,10 +79,9 @@ def register(request):
         
         request.session.delete_test_cookie()
         form = RegisterForm(request.POST)
-        # print(request.POST)
+
         # check if form is valid
         if form.is_valid():
-            # name = form.cleaned_data['name']
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -112,27 +91,10 @@ def register(request):
 
             user.save()
 
-            #TODO: Redirect to signin pafge with a message to check email for vification link
-
-
-            #TODO: Slow. Use Threading to move this to the background
-            send_activation_email(request, user)
-
+            SendEmail.send_activation_email(request, user)
 
             messages.success(request, f'A verification link was sent to "{user.email}"')
             return redirect(reverse('account:sign-in'))
-
-            # login(request, user)  #DO NOT LOG IN USER AFTER SIGNUP, VERIFY EMAIL
-
-            # # add session after logging in user
-            # request.session.setdefault('user', user.username)
-
-            # # check if next is in POST Query parameter
-            # next = request.POST.get('next', False)
-            # if next:
-            #     return redirect(next)
-
-            # return HttpResponseRedirect(reverse('dashboard:my-dashboard')) # redirect to user dashboard
     else:
         user = request.session.get('user', False)
         if user:
@@ -151,7 +113,6 @@ def register(request):
     return render(request, 'users/signup.html', context)
 
 def sign_out(request):
-    #use flush instead of del
     logout(request)
 
     return redirect('account:sign-in')
@@ -173,8 +134,8 @@ def activate_user(request, uidb64, token):
         user.save()
 
         messages.success(request, 'Your email has been verified! You can now sign in')
-
         return redirect(reverse('account:sign-in'))
     
 
-    return render(request, 'users/verification_failed.html', {'user':user})
+    messages.error(request, 'Invalid or email is already valid')
+    return redirect(reverse('account:sign-in'))

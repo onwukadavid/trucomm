@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
             password=password
         )
         user.is_verified = True
-        user.email_verified_at = timezone.now
+        user.email_verified_at = timezone.now()
         user.is_active = True
         user.is_admin = True
         user.is_staff = True

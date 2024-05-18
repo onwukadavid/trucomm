@@ -15,7 +15,7 @@ class User(AbstractBaseUser):# change to User
     last_login = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
     email_verified_at = models.DateTimeField(default=None, null=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

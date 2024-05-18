@@ -2,6 +2,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from users.models import User
 
+
+#TODO: Add password validators
 class RegisterForm(forms.Form):
     # name = forms.CharField(min_length=3, max_length=255)
     username = forms.CharField(min_length=5, max_length=255, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter Your username'}))

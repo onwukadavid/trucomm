@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from users.forms import RegisterForm
+from users.forms import RegisterForm, ProfileForm
 from users.utils import generate_token, SendEmail
 
 User = get_user_model()
@@ -139,3 +139,10 @@ def activate_user(request, uidb64, token):
 
     messages.error(request, 'Invalid or email is already valid')
     return redirect(reverse('account:sign-in'))
+
+
+def update_profile(request):
+    if request.method != 'POST':
+        return redirect(reverse('dashboard:my-dashboard'))
+    form = ProfileForm(request.POST)
+    return render(request)

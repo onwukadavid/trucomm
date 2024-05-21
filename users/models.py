@@ -54,6 +54,7 @@ class Profile(models.Model):
     home_address = models.TextField(verbose_name='home address', null= True)
     mobile_number = models.CharField(verbose_name='mobile number', max_length=11)
     date_of_birth = models.DateField(verbose_name='date of birth', null=True)
+    shipping_address = models.TextField(verbose_name=" shipping address", null=True, blank=True)
 
     def __str__(self):
         return self.user.get_username()

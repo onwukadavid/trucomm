@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from users.forms import RegisterForm, ProfileForm
+from users.models import Profile
 from users.utils import generate_token, SendEmail
 
 User = get_user_model()
@@ -126,7 +128,6 @@ def activate_user(request, uidb64, token):
     except Exception as e:
         user = None
 
-    print(user)
     if user and generate_token.check_token(user, token):
         user.is_verified = True
         user.is_active = True
@@ -140,9 +141,28 @@ def activate_user(request, uidb64, token):
     messages.error(request, 'Invalid or email is already valid')
     return redirect(reverse('account:sign-in'))
 
-
+# TODO: chang house_address field to Charfield but fix error not showing first.
+@login_required
 def update_profile(request):
     if request.method != 'POST':
         return redirect(reverse('dashboard:my-dashboard'))
-    form = ProfileForm(request.POST)
-    return render(request)
+    
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    form = ProfileForm(request.POST, request.FILES, instance=profile)
+
+    if form.is_valid():    
+        profile.user = user
+        profile.first_name=form.cleaned_data.get('first_name')
+        profile.last_name=form.cleaned_data.get('last_name')
+        profile.home_address=form.cleaned_data.get('home_address')
+        profile.mobile_number=form.cleaned_data.get('mobile_number')
+        profile.date_of_birth=form.cleaned_data.get('date_of_birth')
+        profile.shipping_address=form.cleaned_data.get('shipping_address')
+        profile.profile_image=request.FILES.get('profile_image')
+        profile.save()
+        messages.success(request, 'Profile updated')
+    else:
+        messages.error(request, 'An error occurred')
+
+    return render(request, 'dashboard/index.html', {'form':form})

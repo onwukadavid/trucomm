@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
     'carts.apps.CartsConfig',
+    'dashboard.apps.DashboardConfig',
 
     # third-party apps
     'cloudinary'
@@ -119,7 +120,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-MEDIA_URL = '/products/'
+# MEDIA_URL = '/products/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # MEDIA_ROOT = os.path.join(BASE_DIR, '/products/')
 
@@ -134,7 +135,7 @@ SESSION_COOKIE_AGE = 3600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 #EXTRA
-LOGIN_URL = '/account/sign-in'
+LOGIN_URL = '/account/sign-in/'
 
 # CLOUDINARY STORAGE
 cloudinary.config( 

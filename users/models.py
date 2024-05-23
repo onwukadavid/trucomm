@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from users.managers import UserManager
 from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
 
 
 # class User(AbstractUser):
@@ -48,7 +49,7 @@ class User(AbstractBaseUser):# change to User
 
 class Profile(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    profile_image = models.ImageField(verbose_name='profile image')
+    profile_image = CloudinaryField('image', blank=True, null=True)
     first_name = models.CharField(verbose_name='first name', max_length=255)
     last_name = models.CharField(verbose_name='last name', max_length=255)
     home_address = models.TextField(verbose_name='home address', null= True)

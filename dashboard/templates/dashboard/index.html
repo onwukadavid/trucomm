@@ -8,6 +8,9 @@
             font-size: 0.9em;
         }
 
+        .errorlist{
+            list-style-type: none;
+        }
     </style>
 {% endblock style %}
 
@@ -144,8 +147,25 @@
                             </div>
                             <div class="card-body">
                     			<p>Already have an account? <a href="#">Log in instead!</a></p>
-                                <form method="POST" action="{% url 'account:update-profile' %}" name="enq">
+                                <form method="POST" action="{% url 'account:update-profile' %}" enctype="multipart/form-data" name="enq">                                    
+                                    {% csrf_token %}
+                                    <div>
+                                        {% for message in messages %}
+                                            {% if message.tags == "success" %}
+                                            <div style="background-color: rgb(7, 207, 7); color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+                                                {{ message }}
+                                            </div>
+                                            {% endif %}
+                                            
+                                            {% if message.tags == "error" %}
+                                            <div style="background-color: red; color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+                                                {{ message }}
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                     <div class="row">
+                                        <!-- {{form}} -->
                                         {% for field in form %}
                                         <div class="form-group col-md-12 mb-3">
                                             <label>{{ field.label }}<span class="required"></span></label>
@@ -155,6 +175,8 @@
                                             {{ field.errors }}
                                         </div>
                                         {% endfor %}
+                                        {% load cloudinary %}
+                                        {% cloudinary profile.profile_image %}
                                         <div class="col-md-12">
                                             <button type="submit" class="btn btn-fill-out" name="submit" value="Submit">Save</button>
                                         </div>

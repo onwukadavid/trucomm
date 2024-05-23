@@ -120,8 +120,15 @@
                                         <h3>Billing Address</h3>
                                     </div>
                                     <div class="card-body">
-                                        <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
-                                        <p>New York</p>
+                                        <p>
+                                            {% if profile.home_address %}
+                                                {{ profile.home_address }}
+                                            {% else %}
+                                                Please update your billing address
+                                            {% endif %}
+                                        </p>
+                                        <!-- <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
+                                        <p>New York</p> -->
                                         <a href="#" class="btn btn-fill-out">Edit</a>
                                     </div>
                                 </div>
@@ -132,8 +139,15 @@
                                         <h3>Shipping Address</h3>
                                     </div>
                                     <div class="card-body">
-                                        <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
-                                        <p>New York</p>
+                                        <p>
+                                            {% if profile.shipping_address %}
+                                                {{ profile.shipping_address }}
+                                            {% else %}
+                                                Please update your billing address
+                                            {% endif %}
+                                        </p>
+                                        <!-- <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
+                                        <p>New York</p> -->
                                         <a href="#" class="btn btn-fill-out">Edit</a>
                                     </div>
                                 </div>

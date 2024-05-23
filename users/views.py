@@ -141,7 +141,7 @@ def activate_user(request, uidb64, token):
     messages.error(request, 'Invalid or email is already valid')
     return redirect(reverse('account:sign-in'))
 
-# TODO: chang house_address field to Charfield but fix error not showing first.
+# BUG: render dashboard template on failure but url is for update profile.
 @login_required
 def update_profile(request):
     if request.method != 'POST':
@@ -162,6 +162,7 @@ def update_profile(request):
         profile.profile_image=request.FILES.get('profile_image')
         profile.save()
         messages.success(request, 'Profile updated')
+        return redirect(reverse('dashboard:my-dashboard'))
     else:
         messages.error(request, 'An error occurred')
 

@@ -7,7 +7,7 @@ from django.utils import timezone
 class Category(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
-    parent_category = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='subcategories')
+    parent_category = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, related_name='subcategories')
     is_visible = models.BooleanField(default=False)
 
 
@@ -36,7 +36,7 @@ class Product(models.Model):
     price = models.FloatField()
     # image = models.ImageField('products') # use ImageField For production
     image = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name='category')
     created_at = models.DateTimeField(verbose_name='created at', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='updated at', auto_now=True)
 

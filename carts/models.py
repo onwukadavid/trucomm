@@ -14,9 +14,23 @@ class Cart(models.Model):
     def __str__(self):
         return f"{self.user.get_username()}'s cart"
     
+    def add_to_cart(self, product, quantity):
+            cart_item, created = CartItem.objects.get_or_create(cart=self, product=product)
+            if created:
+                print(quantity)
+                self.update_cart(product, quantity=quantity)
+            return cart_item.quantity
 
-    def update_cart(self, product, action=''):
-        cart_item, created = CartItem.objects.get_or_create(cart=self, product=product)
+    def update_cart(self, product, quantity=None, action=''):
+        try:
+            print(quantity)
+            cart_item, created = CartItem.objects.get_or_create(cart=self, product=product)
+        except CartItem.DoesNotExist:
+            return 'Item does not exist'
+        
+        if quantity:
+            cart_item.quantity = quantity
+            cart_item.save()
 
         if action == 'add':
             cart_item.quantity += 1
@@ -25,11 +39,15 @@ class Cart(models.Model):
         if action == 'remove' and cart_item.quantity != 0:
             cart_item.quantity -= 1
             cart_item.save()
-        else:
-            return cart_item.quantity 
+
+        return cart_item.quantity 
         
     def remove_from_cart(self, product):
-        cart_item = CartItem.objects.get(cart=self, product=product)
+        try:
+            cart_item = CartItem.objects.get(cart=self, product=product)
+        except CartItem.DoesNotExist:
+            return'Item does not exist'
+        
         cart_item.delete()
 
     class Meta:
@@ -38,10 +56,10 @@ class Cart(models.Model):
 
 #TODO: FINISH THIS
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.quantity}X of {self.product} in {self.cart}'

@@ -312,13 +312,13 @@
                                 </form>
                             </div><div class="search_overlay"></div>
                         </li>
-                        <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#" data-bs-toggle="dropdown"><i class="linearicons-cart"></i><span class="cart_count">2</span></a>
+                        <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#" data-bs-toggle="dropdown"><i class="linearicons-cart"></i>{% if user.is_authenticated %}{% block cart_count %} {% endblock cart_count %}{% endif %}</a>
                             {% if user.is_authenticated %}
                             <div class="cart_box dropdown-menu dropdown-menu-right">
                                 <ul class="cart_list">
                                     {% for item in items %}
-                                    <li>
-                                        <a href="#" class="item_remove"><i class="ion-close"></i></a>
+                                    <li id="item-list-{{ item.product.id }}">
+                                        <a data-title="Remove" name="{{ item.product.id }}" class="item_remove"><i class="ion-close"></i></a>
                                         <a href="#"><img src="{{item.product.image}}" alt="cart_thumb1">{{item.product.title}}</a>
                                         <span class="cart_quantity"> {{item.quantity}}x <span class="cart_amount"> <span class="price_symbole">$</span></span>{{item.product.price}}</span>
                                     </li>
@@ -505,6 +505,31 @@
 <script src="{% static 'js/jquery.elevatezoom.js' %}"></script>
 <!-- scripts js --> 
 <script src="{% static 'js/scripts.js' %}"></script>
+
+<script>
+    $(document).on('click', '.item_remove', function(e){
+        e.preventDefault();
+        var productId = $(this).attr('name');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "carts:remove-from-cart" %}',
+            data: {
+                product_id: productId,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+
+            success: function(json){
+                document.getElementById("item-list-"+ productId).remove()
+                document.getElementById("item-row-"+ productId).remove()
+            },
+
+            error: function(xhr, errmsg, err){
+
+            }
+        });
+    });
+</script>
 
 {% block script %}
 {% endblock script %}

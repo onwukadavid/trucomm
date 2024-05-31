@@ -1,12 +1,14 @@
-from django.shortcuts import render
-from products.models import Category, Product
-from django.shortcuts import get_object_or_404
-from django.core.paginator import Paginator
+import json
+import os
 import requests
 from pprint import pprint
-import json
+from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
-import os
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404, get_list_or_404
+from carts.models import Cart, CartItem
+from products.models import Category, Product
+from users.models import User
 
 def home(request):
     context = {}
@@ -28,6 +30,13 @@ def home(request):
 
 def products(request):
     products = Product.objects.all()
+    current_user = request.session.get('user')
+    user = User.objects.get(username=current_user)
+    cart = get_object_or_404(Cart, user=user)
+    try:
+        items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
+    except:
+        items = ''
 
     context = {'products':products}
 
@@ -35,6 +44,7 @@ def products(request):
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     context['page_obj'] = page_obj
+    context['items'] = items
      
     return render(request, 'products/products.html', context=context, )
 

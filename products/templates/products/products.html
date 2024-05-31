@@ -36,14 +36,17 @@
 </div>
 <!-- END LOADER -->
 
-{% if message.tags == "success" %}
-<div style="background-color: rgb(7, 207, 7); color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+<!-- {% if message %} -->
+<div class="success-message" style="background-color: rgb(7, 207, 7); color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
     {{ message }}
 </div>
-{% endif %}
+<!-- {% endif %} -->
 
 <!-- START MAIN CONTENT
 <div class="main_content"> -->
+<!-- {% block cart_count %}
+    <span class="cart_count" id="cart_count">0</span>  FIX ME!!!!
+{% endblock cart_count %} -->
 
 <!-- START SECTION SHOP -->
 <div class="section">
@@ -188,7 +191,7 @@
             },
 
             success: function(json){
-                console.log(json)
+                document.getElementById("cart_count").textContent = json.qty
             },
 
             error: function(xhr, errmsg, err){

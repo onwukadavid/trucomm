@@ -6,14 +6,20 @@ from carts.models import Cart, CartItem
 from products.models import Product
 from users.models import User
 
+
+#TODO: Update the count on the page when an item is added to cart
 def cart(request):
     current_user = request.session.get('user')
     user = User.objects.get(username=current_user)
     cart = get_object_or_404(Cart, user=user)
-    items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
+    try:
+        items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
+    except:
+        items = ''
     return render(request, 'carts/shop-cart.html', {'items':items})
 
 
+#TODO: Display message when added to cart and update the count on the page
 def add_to_cart(request):
     current_user = request.session.get('user')
     user = User.objects.get(username=current_user)
@@ -26,24 +32,26 @@ def add_to_cart(request):
         cart, created = Cart.objects.get_or_create(user=user)
         cart.add_to_cart(product, quantity)
         cart.save()
-
-        response = JsonResponse({'product name': product.title})
-        # messages.success(request, 'Added to cart')
+        try:
+            count = len(get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart))
+        except:
+            count = 0
+        response = JsonResponse({'qty':count})
+        # messages.success(request, '')
         return response
 
-
-#TODO: Do this with post request
-def remove_from_cart(request, id):
+def remove_from_cart(request):
     current_user = request.session.get('user')
     user = get_object_or_404(User, username=current_user)
 
 
-    product_id = id
+    product_id = request.POST.get('product_id')
     cart = get_object_or_404(Cart, user=user)
     product = get_object_or_404(Product, pk=product_id)
     cart.remove_from_cart(product)
 
-    return redirect(reverse('carts:show-cart'))
+    response = JsonResponse({'product name': product.title})
+    return response
 
 
 def update_product_quantity(request):

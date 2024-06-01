@@ -61,9 +61,9 @@
                                         <td class="product-name" data-title="Product"><a href="#">{{item.product.title}}</a></td>
                                         <td class="product-price" data-title="Price">{{item.product.price}}</td>
                                         <td class="product-quantity" data-title="Quantity"><div class="quantity">
-                                        <input type="button" value="-" class="minus">
+                                        <input type="button" value="-" class="minus" name="{{ item.product.id }}">
                                         <input type="text" name="quantity" value="{{ item.quantity }}" title="Qty" class="qty" size="4">
-                                        <input type="button" value="+" class="plus">
+                                        <input type="button" value="+" class="plus" name="{{ item.product.id }}">
                                     </div></td>
                                         <td class="product-subtotal" data-title="Total">$90.00</td>
                                         <td class="product-remove" data-title="Remove" name="{{ item.product.id }}"><a ><i class="ti-close"></i></a></td>
@@ -425,6 +425,29 @@
             success: function(json){
                 // console.log(product_id)
                 document.getElementById("item-row-"+ productId).remove()
+            },
+
+            error: function(xhr, errmsg, err){
+
+            }
+        });
+    });
+
+    $(document).on(event='click', data='.plus, .minus', function(e){
+        e.preventDefault();
+        var productId = $(this).attr('name');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "carts:update-cart" %}',
+            data: {
+                product_id: productId,
+                cart_action:$(this).attr('class'),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+
+            success: function(json){
+                // document.getElementById("item-row-"+ productId).remove()
             },
 
             error: function(xhr, errmsg, err){

@@ -23,7 +23,6 @@ class Cart(models.Model):
 
     def update_cart(self, product, quantity=None, action=''):
         try:
-            print(quantity)
             cart_item, created = CartItem.objects.get_or_create(cart=self, product=product)
         except CartItem.DoesNotExist:
             return 'Item does not exist'
@@ -32,11 +31,11 @@ class Cart(models.Model):
             cart_item.quantity = quantity
             cart_item.save()
 
-        if action == 'add':
+        if action == 'plus':
             cart_item.quantity += 1
             cart_item.save()
         
-        if action == 'remove' and cart_item.quantity != 0:
+        if action == 'minus' and cart_item.quantity != 0:
             cart_item.quantity -= 1
             cart_item.save()
 

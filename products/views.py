@@ -5,38 +5,16 @@ from pprint import pprint
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404, get_list_or_404
-from carts.models import Cart, CartItem
+from django.shortcuts import get_object_or_404
 from products.models import Category, Product
 from users.models import User
 
 def home(request):
-    context = {}
-    categories_list = Category.objects.filter(parent_category=None).values('id', 'title')[:4]
-    categories_id = [categories['id'] for categories in categories_list]
-    categories_title = [categories['title'] for categories in categories_list]
-
-    subcategories_list = Category.objects.filter(parent_category__in=categories_id).values('parent_category_id__title','title')
-
-    categories = {}
-    for category in categories_title:
-        categories.setdefault(category, [])
-        categories[category] += [new_subcat['title'] for new_subcat in subcategories_list if new_subcat['parent_category_id__title'] == category]
-
-    context['categories'] = categories
-
-    return render(request, 'index.html', context=context)
+    return render(request, 'index.html')
 
 
 def products(request):
     products = Product.objects.all()
-    current_user = request.session.get('user')
-    user = User.objects.get(username=current_user)
-    cart = get_object_or_404(Cart, user=user)
-    try:
-        items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
-    except:
-        items = ''
 
     context = {'products':products}
 
@@ -44,7 +22,6 @@ def products(request):
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     context['page_obj'] = page_obj
-    context['items'] = items
      
     return render(request, 'products/products.html', context=context, )
 

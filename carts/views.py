@@ -7,19 +7,18 @@ from products.models import Product
 from users.models import User
 
 
+
+#TODO: Add coupon feature
+
+#TODO: Calculate total feature
+
 #TODO: Update the count on the page when an item is added to cart
 def cart(request):
-    current_user = request.session.get('user')
-    user = User.objects.get(username=current_user)
-    cart = get_object_or_404(Cart, user=user)
-    try:
-        items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
-    except:
-        items = ''
-    return render(request, 'carts/shop-cart.html', {'items':items})
+    return render(request, 'carts/shop-cart.html')
 
 
 #TODO: Display message when added to cart and update the count on the page
+#TODO: Update the cart modal using ajax when clicked
 def add_to_cart(request):
     current_user = request.session.get('user')
     user = User.objects.get(username=current_user)
@@ -54,6 +53,7 @@ def remove_from_cart(request):
     return response
 
 
+#TODO: Update the cart modal using ajax when clicked
 def update_product_quantity(request):
     current_user = request.session.get('user')
     user = get_object_or_404(User, username=current_user)

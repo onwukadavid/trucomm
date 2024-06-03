@@ -6,12 +6,16 @@ from users.models import User
 
 
 def cart_items_processor(request):
-    current_user = request.session.get('user')
-    user = User.objects.get(username=current_user)
-    cart = get_object_or_404(Cart, user=user)
     try:
-        items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
+        current_user = request.session.get('user')
+        user = User.objects.get(username=current_user)
+        cart = get_object_or_404(Cart, user=user)
+        items = cart.items.all().order_by('created_at')
+        cart_subtotal = sum(item.total for item in items)
+        # items = get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart)
+    except KeyError:
+        pass
     except:
         items = ''
 
-    return {'items':items}
+    return {'items':items, 'cart_subtotal':cart_subtotal}

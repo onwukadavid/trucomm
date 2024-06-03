@@ -39,7 +39,7 @@ class Cart(models.Model):
             cart_item.quantity -= 1
             cart_item.save()
 
-        return cart_item.quantity 
+        return cart_item.total 
         
     def remove_from_cart(self, product):
         try:
@@ -58,11 +58,15 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
+    total = models.FloatField(max_length=10, default='0')
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.quantity}X of {self.product} in {self.cart}'
     
+    def save(self, *args, **kwargs):
+        self.total = round((self.quantity * self.product.price), 2)
+        return super().save(*args, **kwargs)
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['cart', 'product'], name='unique_cart_product', violation_error_message='Product already exists in cart')

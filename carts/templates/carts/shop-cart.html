@@ -65,7 +65,7 @@
                                         <input type="text" name="quantity" value="{{ item.quantity }}" title="Qty" class="qty" size="4">
                                         <input type="button" value="+" class="plus" name="{{ item.product.id }}">
                                     </div></td>
-                                        <td class="product-subtotal" data-title="Total">$90.00</td>
+                                        <td class="product-subtotal" data-title="Total" id="product-subtotal-{{item.product.id}}">{{item.total}}</td>
                                         <td class="product-remove" data-title="Remove" name="{{ item.product.id }}"><a ><i class="ti-close"></i></a></td>
                                     </tr>
                                 {% endfor %}
@@ -386,7 +386,7 @@
                             <tbody>
                                 <tr>
                                     <td class="cart_total_label">Cart Subtotal</td>
-                                    <td class="cart_total_amount">$349.00</td>
+                                    <td class="cart_total_amount" id="cart_total_amount">${{ cart_subtotal }}</td>
                                 </tr>
                                 <tr>
                                     <td class="cart_total_label">Shipping</td>
@@ -448,6 +448,7 @@
 
             success: function(json){
                 // document.getElementById("item-row-"+ productId).remove()
+                document.getElementById("product-subtotal-"+ productId).textContent = json.total
             },
 
             error: function(xhr, errmsg, err){

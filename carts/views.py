@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
@@ -10,11 +11,16 @@ from users.models import User
 
 #TODO: Add coupon feature
 
-#TODO: Calculate total feature
-
 #TODO: Update the count on the page when an item is added to cart
+@login_required
 def cart(request):
-    return render(request, 'carts/shop-cart.html')
+    current_user = request.session.get('user')
+    user = User.objects.get(username=current_user)
+    cart = get_object_or_404(Cart, user=user)
+    items = cart.items.all().order_by('created_at')
+    cart_subtotal = sum(item.total for item in items)
+    context = {'cart_subtotal':cart_subtotal}
+    return render(request, 'carts/shop-cart.html', {'cart_subtotal':cart_subtotal})
 
 
 #TODO: Display message when added to cart and update the count on the page
@@ -32,7 +38,8 @@ def add_to_cart(request):
         cart.add_to_cart(product, quantity)
         cart.save()
         try:
-            count = len(get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart))
+            # count = len(get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart))
+            count = len(cart.items.all().order_by('created_at'))
         except:
             count = 0
         response = JsonResponse({'qty':count})
@@ -63,8 +70,8 @@ def update_product_quantity(request):
         cart_action = request.POST.get('cart_action')
         cart = get_object_or_404(Cart, user=user)
         product = get_object_or_404(Product, id=product_id)
-        quantity = cart.update_cart(product=product, action=cart_action)
+        total = cart.update_cart(product=product, action=cart_action)
 
-        response = JsonResponse({'success': 'cart updated'})
+        response = JsonResponse({'success': 'cart updated', 'total':total})
             # messages.success(request, 'Added to cart')
         return response

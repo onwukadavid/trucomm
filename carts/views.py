@@ -1,15 +1,13 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.forms import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
+from django.template import Context
 from django.urls import reverse
-from carts.models import Cart, CartItem
+from carts.models import Cart, CartItem, Coupon
 from products.models import Product
 from users.models import User
 
-
-
-#TODO: Add coupon feature
 
 #TODO: Update the count on the page when an item is added to cart
 @login_required
@@ -60,7 +58,6 @@ def remove_from_cart(request):
     return response
 
 
-#TODO: Update the cart modal using ajax when clicked
 def update_product_quantity(request):
     current_user = request.session.get('user')
     user = get_object_or_404(User, username=current_user)
@@ -71,7 +68,24 @@ def update_product_quantity(request):
         cart = get_object_or_404(Cart, user=user)
         product = get_object_or_404(Product, id=product_id)
         total = cart.update_cart(product=product, action=cart_action)
+        cart_subtotal = round(sum(item.total for item in cart.items.all()), 2)
 
-        response = JsonResponse({'success': 'cart updated', 'total':total})
-            # messages.success(request, 'Added to cart')
+        response = JsonResponse({'success': 'cart updated', 'total':total, 'cart_subtotal':cart_subtotal})
         return response
+    
+#TODO: Test when no_of_usage == 0
+def apply_coupon(request):
+    if request.POST.get('action') == 'post':
+        coupon_code = request.POST.get('coupon_code')
+
+        try:
+            coupon = Coupon.objects.get(code=coupon_code)
+        except Coupon.DoesNotExist:
+            return JsonResponse({'status':'Invalid coupon'})
+        
+        if not coupon.is_valid():
+            return JsonResponse({'status':'Invalid coupon'})
+        
+        coupon.no_of_usage -= 1
+        coupon.save()
+        return JsonResponse({'status':'Valid', 'percent':coupon.coupon_percent})

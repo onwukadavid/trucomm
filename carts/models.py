@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -35,7 +36,7 @@ class Cart(models.Model):
             cart_item.quantity += 1
             cart_item.save()
         
-        if action == 'minus' and cart_item.quantity != 0:
+        if action == 'minus' and cart_item.quantity != 1:
             cart_item.quantity -= 1
             cart_item.save()
 
@@ -53,7 +54,7 @@ class Cart(models.Model):
         db_table = 'carts'
 
 
-#TODO: FINISH THIS
+
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -72,3 +73,21 @@ class CartItem(models.Model):
             models.UniqueConstraint(fields=['cart', 'product'], name='unique_cart_product', violation_error_message='Product already exists in cart')
         ]
         
+
+class Coupon(models.Model):
+    code = models.CharField(max_length=15, unique=True)
+    coupon_percent = models.PositiveIntegerField(default=0)
+    no_of_usage = models.PositiveIntegerField(default=0)
+    expires_at = models.DateTimeField()
+    is_expired = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.code
+    
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = 'COUPON'+str(uuid.uuid4()).replace('-','')[:4]
+        return super().save(*args, **kwargs)
+
+    def is_valid(self):
+        return (timezone.now() <= self.expires_at) or ( self.no_of_usage > 0)

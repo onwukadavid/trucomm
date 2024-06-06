@@ -9,6 +9,8 @@ user = get_user_model()
 #Switched to this new model because previous model couldn't account for custom attributes such as quantity.
 class Cart(models.Model):
     user = models.OneToOneField(user, on_delete=models.CASCADE, related_name='cart')
+    applied_coupon = models.BooleanField(default=False)
+    coupon_percent = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

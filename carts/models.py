@@ -92,4 +92,4 @@ class Coupon(models.Model):
         return super().save(*args, **kwargs)
 
     def is_valid(self):
-        return (timezone.now() <= self.expires_at) or ( self.no_of_usage > 0)
+        return ((timezone.now() <= self.expires_at) and (self.no_of_usage > 0))

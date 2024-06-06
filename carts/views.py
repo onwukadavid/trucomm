@@ -9,9 +9,6 @@ from carts.models import Cart, CartItem, Coupon
 from products.models import Product
 from users.models import User
 
-#TODO: REMOVE COUPON CAPABILITIES FROM add_to_cart, remove_from_cart, update_product_quantity
-
-
 def update_total(cart, percent=None):
     if percent is None:
         percent = cart.coupon_percent
@@ -34,7 +31,7 @@ def cart(request):
 
 
 #TODO: Display message when added to cart and update the count on the page
-#TODO: Update the cart modal using ajax when clicked
+#TODO: Remove the cart modal using ajax when clicked
 def add_to_cart(request):
     current_user = request.session.get('user')
     user = User.objects.get(username=current_user)
@@ -48,12 +45,10 @@ def add_to_cart(request):
         cart.add_to_cart(product, quantity)
         cart.save()
         try:
-            # count = len(get_list_or_404(CartItem.objects.order_by('created_at'), cart=cart))
             count = len(cart.items.all().order_by('created_at'))
         except:
             count = 0
         response = JsonResponse({'qty':count})
-        # messages.success(request, '')
         return response
 
 def remove_from_cart(request):
@@ -65,7 +60,7 @@ def remove_from_cart(request):
     cart = get_object_or_404(Cart, user=user)
     product = get_object_or_404(Product, pk=product_id)
     cart.remove_from_cart(product)
-    cart_subtotal = update_total(cart)
+    cart_subtotal = round(sum(item.total for item in cart.items.all()), 2)
     return JsonResponse({'status':'Valid', 'cart_subtotal':cart_subtotal})
 
 
@@ -79,7 +74,7 @@ def update_product_quantity(request):
         cart = get_object_or_404(Cart, user=user)
         product = get_object_or_404(Product, id=product_id)
         total = cart.update_cart(product=product, action=cart_action)
-        cart_subtotal = update_total(cart)
+        cart_subtotal = round(sum(item.total for item in cart.items.all()), 2)
 
         response = JsonResponse({'success': 'cart updated', 'total':total, 'cart_subtotal':cart_subtotal})
         return response
@@ -88,21 +83,27 @@ def update_product_quantity(request):
 def apply_coupon(request):
     if request.POST.get('action') == 'post':
         coupon_code = request.POST.get('coupon_code')
+        current_user = request.session.get('user')
+        user = get_object_or_404(User, username=current_user)
+        cart = get_object_or_404(Cart, user=user)
 
         try:
             coupon = Coupon.objects.get(code=coupon_code)
         except Coupon.DoesNotExist:
-            return JsonResponse({'status':'Invalid coupon'})
+            return JsonResponse({'status':'Coupon does not exist'})
         
         if not coupon.is_valid():
             return JsonResponse({'status':'Invalid coupon'})
         
-        coupon.no_of_usage -= 1
-        coupon.save()
-        current_user = request.session.get('user')
-        user = get_object_or_404(User, username=current_user)
-        cart = get_object_or_404(Cart, user=user)
-        cart.applied_coupon = True
+        if not cart.applied_coupon: 
+            coupon.no_of_usage -= 1
+            coupon.save()
+            cart.applied_coupon = True
+            cart.save()
+
         percent = coupon.coupon_percent
         cart_subtotal = update_total(cart, percent)
         return JsonResponse({'status':'Valid', 'cart_subtotal':cart_subtotal})
+    
+def checkout(request):
+    return render(request, 'carts/checkout.html')

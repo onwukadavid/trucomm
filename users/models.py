@@ -52,9 +52,9 @@ class Profile(models.Model):
     profile_image = CloudinaryField('image', blank=True, null=True)
     first_name = models.CharField(verbose_name='first name', max_length=255)
     last_name = models.CharField(verbose_name='last name', max_length=255)
-    home_address = models.TextField(verbose_name='home address', null= True)
+    home_address = models.TextField(verbose_name='home address', null=True, blank=True)
     mobile_number = models.CharField(verbose_name='mobile number', max_length=11)
-    date_of_birth = models.DateField(verbose_name='date of birth', null=True)
+    date_of_birth = models.DateField(verbose_name='date of birth', null=True, blank=True)
     shipping_address = models.TextField(verbose_name=" shipping address", null=True, blank=True)
 
     def __str__(self):

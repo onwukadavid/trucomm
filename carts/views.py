@@ -1,3 +1,6 @@
+import json
+import os
+import requests
 from django.contrib.auth.decorators import login_required
 from django.forms import ValidationError
 from django.http import JsonResponse
@@ -7,7 +10,24 @@ from django.urls import reverse
 from carts.context_processor import cart_items_processor
 from carts.models import Cart, CartItem, Coupon
 from products.models import Product
-from users.models import User
+from users.models import User, Profile
+
+
+def get_countries(request): #TODO: make logic for handling states, city, postcode
+    url = "https://country-state-city-search-rest-api.p.rapidapi.com/allcountries"
+
+    headers = {
+    	"x-rapidapi-key": os.environ.get('X_RapidAPI_Key'),
+    	"x-rapidapi-host":os.environ.get('X_RapidAPI_Country_Host'),
+    }
+
+    response = requests.get(url, headers=headers)
+    countries_json = response.json()
+    # for country in countries_json:  
+    countries = {country['name']:country['isoCode'] for country in countries_json}
+
+    return JsonResponse({'countries':countries})
+
 
 def update_total(cart, percent=None):
     if percent is None:
@@ -24,9 +44,6 @@ def update_total(cart, percent=None):
 @login_required
 def cart(request):
     context = cart_items_processor(request)
-    # get total. Total can be = cart_subtotal
-
-    # return total w/o applying coupon
     return render(request, 'carts/shop-cart.html', context)
 
 
@@ -105,5 +122,13 @@ def apply_coupon(request):
         cart_subtotal = update_total(cart, percent)
         return JsonResponse({'status':'Valid', 'cart_subtotal':cart_subtotal})
     
+@login_required
 def checkout(request):
-    return render(request, 'carts/checkout.html')
+    context = {}
+    logged_in_user =  request.session.get('user')
+    user = get_object_or_404(User, username=logged_in_user)
+    user_profile = get_object_or_404(Profile, user=user)
+    context['user'] = user
+    context['user_profile'] = user_profile
+    # context['countries'] = countries
+    return render(request, 'carts/checkout.html', context)

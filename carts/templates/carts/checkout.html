@@ -2,6 +2,20 @@
 
 {% load static %}
 
+{% block style %}
+<style>
+    #notification {
+        visibility: hidden;
+        color: red;
+        font-size: small;
+    }
+
+    #notification.show {
+        visibility: visible;
+    }
+</style>
+{% endblock style %}
+
 <!-- LOADER -->
 <div class="preloader">
     <div class="lds-ellipsis">
@@ -82,7 +96,8 @@
                             <div class="input-group-append">
                                 <button class="btn btn-fill-out btn-sm" type="submit" id="apply-coupon">Apply Coupon</button>
                             </div>
-                        </div>
+                            </div>
+                        <div id="notification">Invalid coupon</div>
                     </div>
                 </div>
             </div>
@@ -107,9 +122,6 @@
                         <input type="text" required class="form-control" name="lname" placeholder="Last name *" value="{{user_profile.last_name}}">
                     </div>
                     <div class="form-group mb-3">
-                        <input class="form-control" required type="text" name="cname" placeholder="Company Name">
-                    </div>
-                    <div class="form-group mb-3">
                         <div class="custom_select">
                             <select class="form-control" id="country-select">
                                 <option value="">Select an option...</option>
@@ -119,9 +131,6 @@
                     </div>
                     <div class="form-group mb-3">
                         <input type="text" class="form-control" name="billing_address" required="" placeholder="Address *" value="{{user_profile.home_address}}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="text" class="form-control" name="billing_address2" required="" placeholder="Address line2">
                     </div>
                     <div class="form-group mb-3">
                         <input class="form-control" required type="text" name="city" placeholder="City / Town *">
@@ -244,7 +253,11 @@
             },
 
             error: function(xhr, errmsg, err){
-
+                var notification = document.getElementById("notification");
+                notification.className = "show";
+                setTimeout(function(){
+                    notification.className = notification.className.replace("show", "");
+                }, 10000);
             }
         });
     });

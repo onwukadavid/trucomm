@@ -2,6 +2,52 @@
 
 {% load static %}
 
+{% block style %}
+<style>
+    #notification {
+        visibility: hidden;
+        min-width: 200px;
+        margin-left: -100px;
+        background-color: #31f81f;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        right: 30px;
+        bottom: 30px;
+        font-size: 17px;
+    }
+
+    #notification.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+        from {bottom: 0; opacity: 0;} 
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+    }
+
+    @-webkit-keyframes fadeout {
+        from {bottom: 30px; opacity: 1;} 
+        to {bottom: 0; opacity: 0;}
+    }
+
+    @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+    }
+</style>
+{% endblock style %}
+
 {% block breadcrumb %}
 <!-- START SECTION BREADCRUMB -->
 <div class="breadcrumb_section bg_gray page-title-mini">
@@ -36,11 +82,7 @@
 </div>
 <!-- END LOADER -->
 
-<!-- {% if message %} -->
-<div class="success-message" style="background-color: rgb(7, 207, 7); color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
-    {{ message }}
-</div>
-<!-- {% endif %} -->
+<div id="notification">Added to cart</div>
 
 <!-- START MAIN CONTENT
 <div class="main_content"> -->
@@ -192,6 +234,12 @@
 
             success: function(json){
                 document.getElementById("cart_count").textContent = json.qty
+                var notification = document.getElementById("notification");
+                notification.className = "show";
+                setTimeout(function(){
+                    notification.className = notification.className.replace("show", "");
+                }, 3000);
+
             },
 
             error: function(xhr, errmsg, err){

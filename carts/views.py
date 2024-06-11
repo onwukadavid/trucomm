@@ -3,7 +3,7 @@ import os
 import requests
 from django.contrib.auth.decorators import login_required
 from django.forms import ValidationError
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.template import Context
 from django.urls import reverse
@@ -107,10 +107,10 @@ def apply_coupon(request):
         try:
             coupon = Coupon.objects.get(code=coupon_code)
         except Coupon.DoesNotExist:
-            return JsonResponse({'status':'Coupon does not exist'})
+            return HttpResponseBadRequest('Coupon does not exist')
         
         if not coupon.is_valid():
-            return JsonResponse({'status':'Invalid coupon'})
+            return HttpResponseBadRequest('Coupon has expired')
         
         if not cart.applied_coupon: 
             coupon.no_of_usage -= 1

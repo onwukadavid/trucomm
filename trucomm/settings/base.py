@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'carts.apps.CartsConfig',
     'dashboard.apps.DashboardConfig',
+    'orders.apps.OrdersConfig',
 
     # third-party apps
     'cloudinary'

@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
-# Create your views here.
+def create_order(request):
+    return redirect(reverse('dashboard:my-dashboard'))

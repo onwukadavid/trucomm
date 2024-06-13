@@ -147,17 +147,19 @@
                     <div class="form-group mb-3">
                         <input class="form-control" required type="text" name="email" placeholder="Email address *" value="{{user.email}}">
                     </div>
-                    <div class="form-group mb-3">
-                        <div class="chek-form">
-                            <div class="custome-checkbox">
-                                <input class="form-check-input" type="checkbox" name="checkbox" id="createaccount">
-                                <label class="form-check-label label_info" for="createaccount"><span>Create an account?</span></label>
+                    {% if not request.user.is_authenticated %}
+                        <div class="form-group mb-3">
+                            <div class="chek-form">
+                                <div class="custome-checkbox">
+                                    <input class="form-check-input" type="checkbox" name="checkbox" id="createaccount">
+                                    <label class="form-check-label label_info" for="createaccount"><span>Create an account?</span></label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group create-account mb-3">
-                        <input class="form-control" required type="password" placeholder="Password" name="password" >
-                    </div>
+                        <div class="form-group create-account mb-3">
+                            <input class="form-control" required type="password" placeholder="Password" name="password" >
+                        </div>
+                    {% endif %}
                     <div class="heading_s1">
                         <h4>Additional information</h4>
                     </div>

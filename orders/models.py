@@ -22,11 +22,12 @@ order_statuses = [
 class Order(models.Model):
     owner = models.ForeignKey(user, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=25, unique=True)
-    cart = models.ForeignKey(Cart, related_name='order', null=True, blank=True)
-    product = models.ForeignKey(Product, related_name='order', null=True, blank=True)
+    cart = models.ForeignKey(Cart, related_name='order', null=True, blank=True, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, related_name='order', null=True, blank=True, on_delete=models.DO_NOTHING)
     quantity = models.PositiveBigIntegerField(default=0, null=True, blank=True)
     amount = models.FloatField(max_length=10, default=0, blank=True, null=True)
     status = models.CharField(max_length=255, default=None, choices=order_statuses, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.order_id

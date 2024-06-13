@@ -22,7 +22,7 @@ class Cart(models.Model):
             if created:
                 print(quantity)
                 self.update_cart(product, quantity=quantity)
-            return cart_item.quantity
+            return created
 
     def update_cart(self, product, quantity=None, action=''):
         try:

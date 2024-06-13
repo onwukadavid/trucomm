@@ -59,12 +59,14 @@ def add_to_cart(request):
 
         product = get_object_or_404(Product, id=product_id)
         cart, created = Cart.objects.get_or_create(user=user)
-        cart.add_to_cart(product, quantity)
+        cartitem_created = cart.add_to_cart(product, quantity)
         cart.save()
         try:
             count = len(cart.items.all().order_by('created_at'))
         except:
             count = 0
+        if not cartitem_created:
+            return HttpResponseBadRequest('Item already in cart.')
         response = JsonResponse({'qty':count})
         return response
 
@@ -123,7 +125,7 @@ def apply_coupon(request):
         return JsonResponse({'status':'Valid', 'cart_subtotal':cart_subtotal})
     
 @login_required
-def checkout(request):
+def cart_checkout(request):
     context = {}
     logged_in_user =  request.session.get('user')
     user = get_object_or_404(User, username=logged_in_user)

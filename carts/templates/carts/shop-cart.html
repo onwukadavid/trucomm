@@ -114,7 +114,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{% url 'carts:cart-checkout' %}" class="btn btn-fill-out">Proceed To CheckOut</a>
+                    <form action="{% url 'carts:cart-checkout' %}" method="GET">
+                        <!-- {% csrf_token %} -->
+                        <input type="hidden" name="source" value="cart">
+                        <button type="submit" class="btn btn-fill-out">Proceed To CheckOut</button>
+                    </form>
                 </div>
             </div>
         </div>

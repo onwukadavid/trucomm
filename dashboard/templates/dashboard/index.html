@@ -91,22 +91,17 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
+                                        {% for order in orders %}
                                         <tbody>
                                             <tr>
-                                                <td>#1234</td>
-                                                <td>March 15, 2020</td>
-                                                <td>Processing</td>
-                                                <td>$78.00 for 1 item</td>
-                                                <td><a href="#" class="btn btn-fill-out btn-sm">View</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>#2366</td>
-                                                <td>June 20, 2020</td>
-                                                <td>Completed</td>
-                                                <td>$81.00 for 1 item</td>
+                                                <td>#{{ order.order_id }}</td>
+                                                <td>{{ order.created_at }}</td>
+                                                <td>{{ order.status }}</td>
+                                                <td>${{ order.amount }} for {{ order.quantity }} item</td>
                                                 <td><a href="#" class="btn btn-fill-out btn-sm">View</a></td>
                                             </tr>
                                         </tbody>
+                                        {% endfor %}
                                     </table>
                                 </div>
                             </div>

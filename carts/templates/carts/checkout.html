@@ -227,7 +227,12 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-fill-out btn-block">Place Order</a>
+                    <!-- <a href="#" class="btn btn-fill-out btn-block">Place Order</a> -->
+                    <form action="{% url 'carts:cart-checkout' %}" method="POST">
+                        {% csrf_token %}
+                        <!-- <input type="hidden" name="source" value="cart"> -->
+                        <button type="submit" class="btn btn-fill-out btn-block">Place Order</button>
+                    </form>
                 </div>
             </div>
         </div>

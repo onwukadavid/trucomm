@@ -9,6 +9,7 @@ from django.template import Context
 from django.urls import reverse
 from carts.context_processor import cart_items_processor
 from carts.models import Cart, CartItem, Coupon
+from orders.views import create_order_from_cart
 from products.models import Product
 from users.models import User, Profile
 
@@ -43,6 +44,9 @@ def update_total(cart, percent=None):
 #TODO: Update the count on the page when an item is added to cart
 @login_required
 def cart(request):
+    if request.method == 'POST':
+        return redirect(reverse('carts:cart-checkout'), kwargs={'source':'cart'})
+    
     context = cart_items_processor(request)
     return render(request, 'carts/shop-cart.html', context)
 
@@ -126,11 +130,32 @@ def apply_coupon(request):
     
 @login_required
 def cart_checkout(request):
-    context = {}
+    cart = None
+    product = None
     logged_in_user =  request.session.get('user')
+    context = {}
+    
     user = get_object_or_404(User, username=logged_in_user)
     user_profile = get_object_or_404(Profile, user=user)
+
+    if request.method == 'POST':
+        source = request.session.get('source', False)
+        if source == 'cart':
+            cart = get_object_or_404(Cart, user=request.session.get('_auth_user_id'))
+            order = create_order_from_cart(cart=cart)
+            print(order)
+        elif product != None:
+            ...
+
+        return redirect('/my-dashboard#orders')
+    
+    source = request.session.get('source', False)
+
+    if not source:
+        source = request.GET.get('source')
+        request.session.setdefault('source', source) 
+
     context['user'] = user
     context['user_profile'] = user_profile
-    # context['countries'] = countries
+        
     return render(request, 'carts/checkout.html', context)

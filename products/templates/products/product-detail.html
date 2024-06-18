@@ -175,9 +175,12 @@
                             </div>
                         </div>
                         <div class="cart_btn">
-                            <button class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
-                            <button class="btn btn-fill-out btn-buynow" type="button"></i> Buy now</button>
-                            <a class="add_wishlist" href="#"><i class="icon-heart"></i></a>
+                            <form action="{% url 'carts:cart-checkout' %}" method="GET">
+                                <input type="hidden" name="source" value="product">
+                                <button class="btn btn-fill-out btn-addtocart" type="button"><i class="icon-basket-loaded"></i> Add to cart</button>
+                                <button class="btn btn-fill-out btn-buynow" type="submit"></i> Buy now</button>
+                                <a class="add_wishlist" href="#"><i class="icon-heart"></i></a>
+                            </form>
                         </div>
                     </div>
                     <hr />

@@ -11,7 +11,8 @@ load_dotenv(env_file_path)
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ["https://*.ngrok.io", "https://ba9d-105-112-18-108.ngrok-free.app",]
 
 INTERNAL_IPS = [
     "127.0.0.1",

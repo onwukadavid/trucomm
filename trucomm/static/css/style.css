@@ -1552,7 +1552,7 @@ button:focus:not(:focus-visible) {
 	color: #333 !important;
 }
 .cart_list img {
-	border: 1px solid #ddd
+	border: 1px solid #ddd;
 	background-color: #ffffff;
 	float: left;
 	margin-right: 10px;
@@ -4296,7 +4296,7 @@ footer .widget_title {
 	top: 0;
 	bottom: 0;
 	background-color: #FF324D;
-	z-index: ;
+	/* z-index: ; */
 	transition: all 0.5s ease-in-out;
 	-moz-transform: scale(0);
 	-webkit-transform: scale(0);
@@ -7248,4 +7248,30 @@ blockquote p:last-child {
 }
 .input-group > .input-group-append > .btn {
 	height: 100%;
+}
+
+
+.btn-flutterwave {
+	background-color: #f5a623 !important;
+	color: white !important;
+}
+.btn-flutterwave:hover {
+	background-color: #e49520 !important;
+	color: white !important;
+}
+.btn-paystack {
+	background-color: #1793d1 !important;
+	color: white !important;
+}
+.btn-paystack:hover {
+	background-color: #157ab0 !important;
+	color: white !important;
+}
+.btn-icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.btn-icon img {
+	margin-right: 10px;
 }

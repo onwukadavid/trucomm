@@ -149,11 +149,8 @@ def cart_checkout(request):
 
         return redirect('/my-dashboard#orders')
     
-    source = request.session.get('source', False)
-
-    if not source:
-        source = request.GET.get('source')
-        request.session.setdefault('source', source) 
+    source = request.GET.get('source', 'cart')
+    request.session['source'] =  source
 
     context['user'] = user
     context['user_profile'] = user_profile

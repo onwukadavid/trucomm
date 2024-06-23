@@ -209,31 +209,12 @@
                         <div class="heading_s1">
                             <h4>Payment</h4>
                         </div>
-                        <form action="https://checkout.flutterwave.com/v3/hosted/pay" method="POST" class="mb-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="public_key" value="FLWPUBK_TEST-02b9b5fc6406bd4a41c3ff141cc45e93-X" />
-                            <input type="hidden" name="customer[email]" value="test@mailnator.com" />
-                            <input type="hidden" name="customer[name]" value="Ayomide Jimi-Oni" />
-                            <input type="hidden" name="tx_ref" value="txref-81123" />
-                            <input type="hidden" name="redirect_url" value="https://ba9d-105-112-18-108.ngrok-free.app/my-dashboard/" />
-                            <input type="hidden" name="amount" value="{{ cart_subtotal }}" />
-                            <input type="hidden" name="currency" value="NGN" />
-                            <input type="hidden" name="meta[source]" value="docs-html-test" />
-                            <!-- Flutterwave Button -->
-                            <button class="btn btn-flutterwave btn-icon btn-block">
-                                <img src="https://flutterwave.com/images/logo/logo-mark/full.svg" alt="Flutterwave Logo" width="20" height="20">
-                                Pay with Flutterwave
-                            </button>
-                        </form>
-
-                        <form action="{% url 'carts:cart-checkout' %}" method="POST">
-                            {% csrf_token %}
                             <!-- Paystack Button -->
-                            <button class="btn btn-paystack btn-icon btn-block">
-                                <img src="https://nigerialogos.com/logos/paystack/paystack.svg" alt="Paystack Logo" width="20" height="20">
-                                Pay with Paystack
+                            <button onclick="payWithPaystack()" class="btn btn-fill-out btn-block">
+                                <!-- <img src="https://nigerialogos.com/logos/paystack/paystack.svg" alt="Paystack Logo" width="20" height="20"> -->
+                                Pay Now
                             </button>
-                        </form>
+
                     </div>
                     <!-- <a href="#" class="btn btn-fill-out btn-block">Place Order</a> -->
                     <!-- <form action="{% url 'carts:cart-checkout' %}" method="POST">
@@ -296,5 +277,25 @@
             }
         });
     });
+
+    function payWithPaystack() {
+      var handler = PaystackPop.setup({
+        key: '{{ pbk }}',
+        email: '{{ user.email }}',
+        amount: parseInt("100000"),
+        currency: 'NGN',
+        ref: '{{ user_id }}',
+        callback: function(response) {
+          //this happens after the payment is completed successfully
+          var reference = response.reference;
+          alert('Payment complete! Reference: ' + reference);
+          // Make an AJAX call to your server with the reference to verify the transaction
+        },
+        onClose: function() {
+          alert('Transaction was not completed, window closed.');
+        },
+      });
+      handler.openIframe();
+    }
 </script>
 {% endblock script %}

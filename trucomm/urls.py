@@ -29,6 +29,7 @@ urlpatterns = [
     path('my-dashboard/', include('dashboard.urls')),
     path('cart/', include('carts.urls')),
     path('order/', include('orders.urls')),
+    path('transaction/', include('transactions.urls')),
 ]
 
 if settings.DEBUG:

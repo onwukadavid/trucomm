@@ -154,5 +154,6 @@ def cart_checkout(request):
 
     context['user'] = user
     context['user_profile'] = user_profile
+    context['pbk'] = os.environ.get('PAYSTACK_PUBLIC_kEY')
         
     return render(request, 'carts/checkout.html', context)

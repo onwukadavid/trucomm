@@ -209,19 +209,20 @@
                         <div class="heading_s1">
                             <h4>Payment</h4>
                         </div>
-                            <!-- Paystack Button -->
-                            <button onclick="payWithPaystack()" class="btn btn-fill-out btn-block">
-                                <!-- <img src="https://nigerialogos.com/logos/paystack/paystack.svg" alt="Paystack Logo" width="20" height="20"> -->
+                        <!-- Paystack Button -->
+                        <button onclick="payWithPaystack()" class="btn btn-fill-out btn-block">
+                            <!-- <img src="https://nigerialogos.com/logos/paystack/paystack.svg" alt="Paystack Logo" width="20" height="20"> -->
+                            Pay Now
+                        </button>
+                        <!-- <form action="{% url 'transaction:start-transaction' %}" method="POST">
+                            {% csrf_token %}
+                            Paystack Button
+                            <button type="submit" class="btn btn-fill-out btn-block">
+                                <img src="https://nigerialogos.com/logos/paystack/paystack.svg" alt="Paystack Logo" width="20" height="20">
                                 Pay Now
                             </button>
-
+                        </form> -->
                     </div>
-                    <!-- <a href="#" class="btn btn-fill-out btn-block">Place Order</a> -->
-                    <!-- <form action="{% url 'carts:cart-checkout' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="source" value="cart">
-                        <button type="submit" class="btn btn-fill-out btn-block">Place Order</button>
-                    </form> -->
                 </div>
             </div>
         </div>
@@ -282,14 +283,24 @@
       var handler = PaystackPop.setup({
         key: '{{ pbk }}',
         email: '{{ user.email }}',
-        amount: parseInt("100000"),
+        amount: parseInt("{{cart_subtotal}}00"),
         currency: 'NGN',
-        ref: '{{ user_id }}',
+        ref:"{{user_id}}",
         callback: function(response) {
           //this happens after the payment is completed successfully
-          var reference = response.reference;
-          alert('Payment complete! Reference: ' + reference);
           // Make an AJAX call to your server with the reference to verify the transaction
+          window.location.assign("/transaction/verify-transaction/" + String(response['reference']))
+        //   $.ajax({
+        //     type: 'GET',
+        //     url: "/transaction/verify-transaction/" + String(response['reference']),
+        //     success: function(response) {
+        //         console.log(response);
+        //   window.location.assign("{% url 'dashboard:my-dashboard' %}")
+        //     },
+        //     error: function(xhr, errmsg, err) {
+        //         console.error(xhr, errmsg, err);
+        //     }
+        // });
         },
         onClose: function() {
           alert('Transaction was not completed, window closed.');

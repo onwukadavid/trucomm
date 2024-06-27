@@ -11,7 +11,7 @@ def cart_items_processor(request):
         user = User.objects.get(username=current_user)
         cart = get_object_or_404(Cart, user=user)
         items = cart.items.all().order_by('created_at')
-        cart_subtotal = round(sum(item.total for item in items), 2)
+        cart_subtotal = round(sum(item.total for item in items))
     except KeyError:
         pass
     except:

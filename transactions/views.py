@@ -10,6 +10,8 @@ from carts.models import Cart
 from orders.models import Order
 from orders.views import create_order_from_cart 
 
+
+#TODO: Create Transaction model to handle all things payment and transansaction
 def start_transaction(request):
     if request.method == 'POST':
         url = "https://api.paystack.co/transaction/initialize"

@@ -10,15 +10,31 @@ from products.models import Category, Product
 from users.models import User
 
 def home(request):
-    return render(request, 'index.html')
+    #TODO: category query string should be its slug and not id
+    context = {}
+    new_arrival = Product.objects.all().order_by('-created_at')[:8]
+    featured = Product.objects.filter(featured=True)[:8]
+    special = Product.objects.filter(special=True)[:8]
+    context['featured'] = featured
+    context['special'] = special
+    context['new_arrival'] = new_arrival
+    return render(request, 'index.html', context)
 
 
 def products(request):
-    products = Product.objects.all()
+    if request.GET and (request.GET != 'page'):
+        filter_params = {}
+        for k,v in request.GET.items():
+            if k == 'page':
+                continue
+            filter_params[k]=v
+        products = Product.objects.filter(**filter_params)
+    else:
+        products = Product.objects.all()
 
     context = {'products':products}
 
-    paginator = Paginator(products, 10)
+    paginator = Paginator(products, 3)
     page_num = request.GET.get('page')
     page_obj = paginator.get_page(page_num)
     context['page_obj'] = page_obj

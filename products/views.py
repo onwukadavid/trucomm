@@ -12,9 +12,9 @@ from users.models import User
 def home(request):
     #TODO: category query string should be its slug and not id
     context = {}
-    new_arrival = Product.objects.all().order_by('-created_at')[:8]
-    featured = Product.objects.filter(featured=True)[:8]
-    special = Product.objects.filter(special=True)[:8]
+    new_arrival = Product.objects.select_related('category').order_by('-created_at')[:8]
+    featured = Product.objects.filter(featured=True).select_related('category')[:8]
+    special = Product.objects.filter(special=True).select_related('category')[:8]
     context['featured'] = featured
     context['special'] = special
     context['new_arrival'] = new_arrival
@@ -28,9 +28,9 @@ def products(request):
             if k == 'page':
                 continue
             filter_params[k]=v
-        products = Product.objects.filter(**filter_params)
+        products = Product.objects.filter(**filter_params).select_related('category')
     else:
-        products = Product.objects.all()
+        products = Product.objects.select_related('category').all()
 
     context = {'products':products}
 

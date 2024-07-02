@@ -8,10 +8,11 @@ from users.models import User
 def cart_items_processor(request):
     try:
         current_user = request.session.get('user')
-        user = User.objects.get(username=current_user)
-        cart = get_object_or_404(Cart, user=user)
+        # user = User.objects.get(username=current_user)
+        # user = get_object_or_404(User, username=current_user)
+        cart = get_object_or_404(Cart, user__username=current_user)
         items = cart.items.all().order_by('created_at')
-        cart_subtotal = round(sum(item.total for item in items))
+        cart_subtotal = round(sum(item.total for item in items))    
     except KeyError:
         pass
     except:

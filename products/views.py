@@ -4,13 +4,14 @@ import requests
 from pprint import pprint
 from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import get_list_or_404, render
 from django.shortcuts import get_object_or_404
 from products.models import Category, Product
 from users.models import User
 
 def home(request):
-    #TODO: category query string should be its slug and not id
+    #TODO: category page and url
     context = {}
     new_arrival = Product.objects.select_related('category').order_by('-created_at')[:8]
     featured = Product.objects.filter(featured=True).select_related('category')[:8]
@@ -56,6 +57,17 @@ def product_detail(request, category, slug):
     # return product detail template
     
     return render(request, 'products/product-detail.html', context=context)
+
+
+def categories(request, slug):
+
+    products = Product.objects.filter(Q(category__slug = slug) | Q(category__title = slug)).select_related('category')
+    
+    paginator = Paginator(products, 3)
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
+    context = {'page_obj':page_obj} 
+    return render(request, 'products/products.html', context)   
 
 
 def populate_categories(request):

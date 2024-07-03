@@ -13,7 +13,7 @@ from users.models import User
 def home(request):
     #TODO: category page and url
     context = {}
-    new_arrival = Product.objects.select_related('category').order_by('-created_at')[:8]
+    new_arrival = Product.objects.get_new_arrivals().select_related('category')[:8]
     featured = Product.objects.filter(featured=True).select_related('category')[:8]
     special = Product.objects.filter(special=True).select_related('category')[:8]
     context['featured'] = featured
@@ -24,12 +24,16 @@ def home(request):
 
 def products(request):
     if request.GET and (request.GET != 'page'):
-        filter_params = {}
-        for k,v in request.GET.items():
-            if k == 'page':
-                continue
-            filter_params[k]=v
-        products = Product.objects.filter(**filter_params).select_related('category')
+        print(len(request.GET))
+        if (len(request.GET)==1) and request.GET.get('new_arrival', False):
+            products = Product.objects.get_new_arrivals().select_related('category')
+        else:
+            filter_params = {}
+            for k,v in request.GET.items():
+                if k == 'page':
+                    continue
+                filter_params[k]=v
+            products = Product.objects.filter(**filter_params).select_related('category')
     else:
         products = Product.objects.select_related('category').all()
 
@@ -61,7 +65,7 @@ def product_detail(request, category, slug):
 
 def categories(request, slug):
 
-    products = Product.objects.filter(Q(category__slug = slug) | Q(category__title = slug)).select_related('category')
+    products = Product.objects.filter(Q(category__slug = slug) | Q(category__title = slug) | Q(category__parent_category__slug = slug)).select_related('category')
     
     paginator = Paginator(products, 3)
     page_num = request.GET.get('page')

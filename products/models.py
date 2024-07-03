@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from cloudinary.models import CloudinaryField
-from products.managers import CategoryManager
+from products.managers import CategoryManager, ProductManager
 from django.utils import timezone
 
 class Category(models.Model):
@@ -44,6 +44,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(verbose_name='created at', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='updated at', auto_now=True)
 
+    objects = ProductManager()
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
@@ -55,3 +57,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def new_arrival(self):
+        future = self.created_at+timezone.timedelta(1)
+        return timezone.now() <= future

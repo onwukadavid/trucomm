@@ -85,12 +85,12 @@
                     <div class="col-md-6">
                     	<div class="text-center text-md-end">
                            	<ul class="header_list">
-                            	<li><a href="compare.html"><i class="ti-control-shuffle"></i><span>Compare</span></a></li>
-                                <li><a href="wishlist.html"><i class="ti-heart"></i><span>Wishlist</span></a></li>
-
+                            	<!-- <li><a href="compare.html"><i class="ti-control-shuffle"></i><span>Compare</span></a></li> -->
+                                
                                 {% if not request.user.is_authenticated %}
                                 <li><a href="{% url 'account:sign-in' %}"><i class="ti-user"></i><span>Login</span></a></li>
                                 {% else %}
+                                <li><a href="{% url 'dashboard:my-dashboard' %}"><span>My dashboard</span></a></li>
                                 <li><a href="{% url 'account:sign-out' %}"><i class="ti-user"></i><span>Logout</span></a></li>
                                 {% endif %}
     						</ul>
@@ -112,31 +112,7 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                         <ul class="navbar-nav">
                             <li class="dropdown">
-                                <a class="nav-link dropdown-toggle" href="{% url 'home' %}">Home</a>
-                                <div class="dropdown-menu">
-                                    <ul> 
-                                        <li><a class="dropdown-item nav-link nav_item" href="index.html">Fashion 1</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="index-2.html">Fashion 2</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="index-3.html">Furniture 1</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="index-4.html">Furniture 2</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="index-5.html">Electronics 1</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="index-6.html">Electronics 2</a></li>
-                                    </ul>
-                                </div>   
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu">
-                                    <ul> 
-                                        <li><a class="dropdown-item nav-link nav_item" href="about.html">About Us</a></li> 
-                                        <li><a class="dropdown-item nav-link nav_item" href="contact.html">Contact Us</a></li> 
-                                        <li><a class="dropdown-item nav-link nav_item" href="faq.html">Faq</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="404.html">404 Error Page</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="login.html">Login</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="signup.html">Register</a></li>
-                                        <li><a class="dropdown-item nav-link nav_item" href="term-condition.html">Terms and Conditions</a></li>
-                                    </ul>
-                                </div>
+                                <a class="nav-link" href="{% url 'home' %}">Home</a>
                             </li>
                             <li class="dropdown dropdown-mega-menu">
                                 <a class="dropdown-toggle nav-link" href="{% url 'products:all-products' %}" >Products</a>
@@ -149,16 +125,16 @@
                                                     <li class="dropdown-header">{{ category }}</li>
 
                                                     {% for subcategory in subcategories %}
-                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list-left-sidebar.html">{{ subcategory }}</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="{% url 'products:category' category %}">{{ subcategory }}</a></li>
                                                     {% endfor %}
                                                 </ul>
                                             </li>
                                         {% endfor %}
                                     </ul>
-                                    <div class="d-lg-flex menu_banners row g-3 px-3">
+                                    <!-- <div class="d-lg-flex menu_banners row g-3 px-3">
                                         <div class="col-sm-4">
                                             <div class="header-banner">
-                                                <img src="{% static 'images/menu_banner1.jpg' %}" alt="menu_banner1">
+                                                <img src="{% static  'images/nc.jpg' %}" alt="menu_banner1">
                                                 <div class="banne_info">
                                                     <h6>10% Off</h6>
                                                     <h4>New Arrival</h4>
@@ -166,10 +142,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-4" style="margin-right: 5px;">
                                             <div class="header-banner">
-                                                <img src="{% static 'images/menu_banner2.jpg' %}" alt="menu_banner2">
-                                                <div class="banne_info">
+                                                <div class="image-wrapper">
+                                                    <img src="{% static  'images/mf-edit1.png' %}" alt="menu_banner2">
+                                                </div>
+                                                <div class="banne_info-flex">
                                                     <h6>15% Off</h6>
                                                     <h4>Men's Fashion</h4>
                                                     <a href="/products/category/men">Shop now</a>
@@ -177,68 +155,18 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <div class="header-banner">
-                                                <img src="{% static 'images/menu_banner3.jpg' %}" alt="menu_banner3">
-                                                <div class="banne_info">
+                                            <div class="header-banner" style="margin: 0 20px 0 -20px;">
+                                                <div class="image-wrapper" style="background-color: rgb(139, 255, 174);">
+                                                    <img src="{% static  'images/kf-edit.png' %}" alt="menu_banner3">
+                                                </div>
+                                                <div class="banne_info-flex">
                                                     <h6>23% Off</h6>
                                                     <h4>Kids Fashion</h4>
                                                     <a href="/products/category/kids">Shop now</a>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle nav-link" href="#" data-bs-toggle="dropdown">Blog</a>
-                                <div class="dropdown-menu dropdown-reverse">
-                                    <ul>
-                                        <li>
-                                            <a class="dropdown-item menu-link dropdown-toggler" href="#">Grids</a>
-                                            <div class="dropdown-menu">
-                                                <ul> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-three-columns.html">3 columns</a></li>
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-four-columns.html">4 columns</a></li> 
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-left-sidebar.html">Left Sidebar</a></li> 
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-right-sidebar.html">right Sidebar</a></li>
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-standard-left-sidebar.html">Standard Left Sidebar</a></li> 
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-standard-right-sidebar.html">Standard right Sidebar</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item menu-link dropdown-toggler" href="#">Masonry</a>
-                                            <div class="dropdown-menu">
-                                                <ul> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-masonry-three-columns.html">3 columns</a></li>
-                                               		<li><a class="dropdown-item nav-link nav_item" href="blog-masonry-four-columns.html">4 columns</a></li> 
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-masonry-left-sidebar.html">Left Sidebar</a></li> 
-                                                	<li><a class="dropdown-item nav-link nav_item" href="blog-masonry-right-sidebar.html">right Sidebar</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item menu-link dropdown-toggler" href="#">Single Post</a>
-                                            <div class="dropdown-menu">
-                                                <ul> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-single.html">Default</a></li>
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-single-left-sidebar.html">left sidebar</a></li>
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-single-slider.html">slider post</a></li> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-single-video.html">video post</a></li> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-single-audio.html">audio post</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item menu-link dropdown-toggler" href="#">List</a>
-                                            <div class="dropdown-menu">
-                                                <ul> 
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-list-left-sidebar.html">left sidebar</a></li>
-                                                    <li><a class="dropdown-item nav-link nav_item" href="blog-list-right-sidebar.html">right sidebar</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    </div> -->
                                 </div>
                             </li>
                             <li class="dropdown dropdown-mega-menu">
@@ -299,7 +227,7 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li><a class="nav-link nav_item" href="contact.html">Contact Us</a></li> 
+                            <!-- <li><a class="nav-link nav_item" href="contact.html">Contact Us</a></li>  -->
                         </ul>
                     </div>
                     <ul class="navbar-nav attr-nav align-items-center">
@@ -325,7 +253,7 @@
                                     {% endfor %}
                                 </ul>
                                 <div class="cart_footer">
-                                    <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price"> <span class="price_symbole">$</span></span>159.00</p>
+                                    <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price"> <span class="price_symbole">$</span></span>{{ cart_subtotal }}</p>
                                     <p class="cart_buttons"><a href="{% url 'carts:show-cart' %}" class="btn btn-fill-line view-cart">View Cart</a><a href="{% url 'carts:cart-checkout' %}" class="btn btn-fill-out checkout">Checkout</a></p>
                                 </div>
                             </div>

@@ -12,7 +12,7 @@ def dashboard(request):
     context = {}
     profile = Profile.objects.get(user=user)
     form = ProfileForm(instance=profile)
-    orders = get_list_or_404(Order.objects.all().order_by('-created_at'), owner=user)
+    orders = Order.objects.filter(owner=user).order_by('-created_at')
     context['form'] = form
     context['profile'] = profile
     context['orders'] = orders

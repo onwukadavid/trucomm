@@ -24,7 +24,6 @@ def home(request):
 
 def products(request):
     if request.GET and (request.GET != 'page'):
-        print(len(request.GET))
         if (len(request.GET)==1) and request.GET.get('new_arrival', False):
             products = Product.objects.get_new_arrivals().select_related('category')
         else:

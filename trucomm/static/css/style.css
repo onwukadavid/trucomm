@@ -1922,13 +1922,55 @@ header.light_skin.nav-fixed .social_icons li a:hover {
 }
 .header-banner,
 .header-banner2 {
+	/* display: block; */
+	position: relative;
+	margin-bottom: 15px;
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-banner img {
+	height: 200px;
+	width: 370px;
+	object-fit: contain;
+}
+
+/* .header-banner-flex {
 	display: block;
 	position: relative;
 	margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+} */
+
+.image-wrapper {
+    flex-shrink: 0;
+	height: 200px;
+	width: 370px;
+	object-fit: contain;
+	background-color: rgb(252, 216, 162);
 }
-.header-banner img {
-	width: 100%;
+
+.image-wrapper img {
+    width: 100%;
+    /* height: auto; 
+    display: block; */
 }
+
+.banne_info-flex {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	-moz-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	padding: 15px;
+    flex-grow: 1;
+    padding-left: 20px;
+    text-align: right;
+}
+
 .banne_info {
 	position: absolute;
 	right: 0;

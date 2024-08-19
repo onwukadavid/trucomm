@@ -6,6 +6,10 @@ from users.models import User
 
 
 def cart_items_processor(request):
+    
+    if not request.user.is_authenticated:
+        return {'items':'', 'cart_subtotal':''}
+    
     try:
         current_user = request.session.get('user')
         # user = User.objects.get(username=current_user)

@@ -41,7 +41,7 @@ class ProfileForm(forms.ModelForm):
     last_name = forms.CharField(min_length=5, max_length=255, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Doe'}))
     home_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter your house address'}))
     mobile_number = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'08108412920'}))
-    date_of_birth = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'01/10/2024'}), error_messages={"invalid":'Invalid date format. It must be in YYYY-MM-DD format.','invalid_date':'Invalid date'})
+    date_of_birth = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'YYYY-MM-DD'}), error_messages={"invalid":'Invalid date format. It must be in YYYY-MM-DD format.','invalid_date':'Invalid date'})
     shipping_address = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter your shipping address'}))
     profile_image = CloudinaryFileField(required=False)
 

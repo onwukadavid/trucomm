@@ -164,6 +164,6 @@ def update_profile(request):
         messages.success(request, 'Profile updated')
         return redirect(reverse('dashboard:my-dashboard'))
     else:
-        messages.error(request, 'An error occurred')
+        messages.error(request, 'An error occurred. Please update your profile details.')
 
     return render(request, 'dashboard/index.html', {'form':form})

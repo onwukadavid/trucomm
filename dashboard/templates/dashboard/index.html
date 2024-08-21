@@ -40,6 +40,19 @@
 
 
 {% block body %}
+    {% for message in messages %}
+    {% if message.tags == "success" %}
+    <div style="background-color: rgb(7, 207, 7); color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+        {{ message }}
+    </div>
+    {% endif %}
+
+    {% if message.tags == "error" %}
+    <div style="background-color: red; color: white; border-radius: 5px; padding: 10px; text-align: center; margin-bottom: 10px;">
+        {{ message }}
+    </div>
+    {% endif %}
+{% endfor %}
 <!-- START SECTION SHOP -->
 <div class="section">
 	<div class="container">
@@ -48,10 +61,10 @@
                 <div class="dashboard_menu">
                     <ul class="nav nav-tabs flex-column" role="tablist">
                       <li class="nav-item">
-                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="ti-layout-grid2"></i>Dashboard</a>
+                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="?dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="ti-layout-grid2"></i>Dashboard</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="ti-shopping-cart-full"></i>Orders</a>
+                        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="?orders" role="tab" aria-controls="orders" aria-selected="false"><i class="ti-shopping-cart-full"></i>Orders</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="ti-location-pin"></i>My Address</a>

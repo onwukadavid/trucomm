@@ -11,4 +11,5 @@ urlpatterns = [
     path('apply-coupon/', views.apply_coupon, name='apply-coupon'),
     path('cart-checkout/', views.cart_checkout, name='cart-checkout'),
     path('countries/', views.get_countries, name='get-countries'),
+    path('update-cart-dropdown/', views.update_cart_dropdown, name='update-cart-dropdown'),
 ]

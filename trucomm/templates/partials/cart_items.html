@@ -1,0 +1,9 @@
+<ul class="cart_list">
+    {% for item in items %}
+    <li id="item-list-{{ item.product.id }}">
+        <a data-title="Remove" name="{{ item.product.id }}" class="item_remove"><i class="ion-close"></i></a>
+        <a href="#"><img src="{{item.product.image}}" alt="cart_thumb1">{{item.product.title}}</a>
+        <span class="cart_quantity"> {{item.quantity}}x <span class="cart_amount"> <span class="price_symbole">$</span></span>{{item.product.price}}</span>
+    </li>
+    {% endfor %}
+</ul>

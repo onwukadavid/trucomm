@@ -147,17 +147,11 @@
                         <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#" data-bs-toggle="dropdown"><i class="linearicons-cart"></i>{% if user.is_authenticated %}{% block cart_count %} {% endblock cart_count %}{% endif %}</a>
                             {% if user.is_authenticated %}
                             <div class="cart_box dropdown-menu dropdown-menu-right">
-                                <ul class="cart_list">
-                                    {% for item in items %}
-                                    <li id="item-list-{{ item.product.id }}">
-                                        <a data-title="Remove" name="{{ item.product.id }}" class="item_remove"><i class="ion-close"></i></a>
-                                        <a href="#"><img src="{{item.product.image}}" alt="cart_thumb1">{{item.product.title}}</a>
-                                        <span class="cart_quantity"> {{item.quantity}}x <span class="cart_amount"> <span class="price_symbole">$</span></span>{{item.product.price}}</span>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
+                                <div class="cart_list">
+                                    {% include 'partials/cart_items.html' with items=items %}
+                                </div>
                                 <div class="cart_footer">
-                                    <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price"> <span class="price_symbole">$</span></span>{{ cart_subtotal }}</p>
+                                    <!-- <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price">${{ cart_subtotal }}</span></p> -->
                                     <p class="cart_buttons"><a href="{% url 'carts:show-cart' %}" class="btn btn-fill-line view-cart">View Cart</a><a href="{% url 'carts:cart-checkout' %}" class="btn btn-fill-out checkout">Checkout</a></p>
                                 </div>
                             </div>

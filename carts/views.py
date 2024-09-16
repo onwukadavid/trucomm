@@ -6,6 +6,7 @@ from django.forms import ValidationError
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.template import Context
+from django.template.loader import render_to_string
 from django.urls import reverse
 from carts.context_processor import cart_items_processor
 from carts.models import Cart, CartItem, Coupon
@@ -41,7 +42,6 @@ def update_total(cart, percent=None):
     
     return cart_subtotal
 
-#TODO: Update the count on the page when an item is added to cart
 @login_required
 def cart(request):
     if request.method == 'POST':
@@ -51,8 +51,6 @@ def cart(request):
     return render(request, 'carts/shop-cart.html', context)
 
 
-#TODO: Display message when added to cart and update the count on the page
-#TODO: Remove the cart modal using ajax when clicked
 def add_to_cart(request):
     current_user = request.session.get('user')
     user = User.objects.get(username=current_user)
@@ -157,3 +155,36 @@ def cart_checkout(request):
     context['pbk'] = os.environ.get('PAYSTACK_PUBLIC_kEY')
         
     return render(request, 'carts/checkout.html', context)
+
+
+"""
+This view handles generating the updated HTML for the cart dropdown, including the cart items, count, and subtotal. To do this, the view:
+    - Fetches the cart items from the database (or session).
+    - Calculates the cart subtotal.
+    - Uses render_to_string to render the cart items into an HTML snippet (cart_list_html) using the partials/cart_items.html template.
+    - Calculates the cart count (i.e., the number of items in the cart) and adds it to the response.
+    - Prepares a JSON response with the rendered HTML, the cart count, and the subtotal.
+    
+The JavaScript in the browser then takes this response and:
+Updates the cart item list in the dropdown using $('.cart_box .cart_list').html(response.cart_list_html) — this replaces the old cart item list with the new one that came from the server.
+"""
+def update_cart_dropdown(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(user=request.user)
+        items = cart.items.all()
+        cart_subtotal = cart.get_subtotal(items)
+        
+        """
+        The render_to_string('partials/cart_items.html', {'items': items}) line renders the cart items into HTML using the template file partials/cart_items.html.
+        Why use render_to_string? Because Django can use this function to create HTML snippets dynamically (based on the current state of the cart) and return them in the AJAX response. This HTML snippet can then be inserted directly into the DOM using JavaScript on the client side.
+        """
+        cart_list_html = render_to_string('partials/cart_items.html', {'items': items})
+        cart_count = len(items)
+        
+        return JsonResponse({
+            'cart_list_html': cart_list_html,
+            'cart_count': cart_count,
+            'cart_subtotal': cart_subtotal,
+        })
+    else:
+        return JsonResponse({'error': 'User not authenticated'}, status=403)

@@ -51,6 +51,9 @@ class Cart(models.Model):
             return'Item does not exist'
         
         cart_item.delete()
+        
+    def get_subtotal(self, items):
+        return round(sum(item.total for item in items))
 
     class Meta:
         db_table = 'carts'

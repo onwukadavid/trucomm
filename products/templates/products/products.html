@@ -170,7 +170,7 @@
                                     <div class="list_product_action_box">
                                         <ul class="list_none pr_action_btn">
                                             <li class="add-to-cart">
-                                                <button type="button" value="{{ product.id }}" class="add-cart"><i class="icon-basket-loaded"></i> Add To Cart</button></li>  <!-- TODO: SYLE THIS BUTTON -->
+                                                <button type="button" value="{{ product.id }}" class="btn btn-fill-out btn-addtocart" id="add-cart"><i class="icon-basket-loaded"></i> Add To Cart</button></li>  <!-- TODO: SYLE THIS BUTTON -->
                                             <li><a href="shop-compare.html" class="popup-ajax"><i class="icon-shuffle"></i></a></li>
                                             <li><a href="shop-quick-view.html" class="popup-ajax"><i class="icon-magnifier-add"></i></a></li>
                                             <li><a href="#"><i class="icon-heart"></i></a></li>
@@ -219,7 +219,7 @@
 
 {% block script %}
 <script>
-    $(document).on('click', '.add-cart', function(e){
+    $(document).on('click', '#add-cart', function(e){
         e.preventDefault();
         $.ajax({
             type: 'POST',
@@ -231,19 +231,54 @@
             },
 
             success: function(json){
-                document.getElementById("cart_count").textContent = json.qty
+                // document.getElementById("cart_count").textContent = json.qty
                 var notification = document.getElementById("notification");
-                notification.className = "show";
+                notification.textContent = "Added to cart";
+                notification.style.backgroundColor = "#31f81f"; // Green background for success
+                notification.classList.add("show");
+                updateCartDropdown();
                 setTimeout(function(){
-                    notification.className = notification.className.replace("show", "");
+                    notification.classList.remove("show");
                 }, 3000);
 
             },
 
             error: function(xhr, errmsg, err){
+                // Show error notification
+                var notification = document.getElementById("notification");
+                if (xhr.status === 400) {
+                    notification.textContent = xhr.responseText; // Error message from server
+                } else {
+                    notification.textContent = "An error occurred. Please try again."; // General error
+                }
+                notification.style.backgroundColor = "#f44336"; // Red background for error
+                notification.classList.add("show");
 
+                setTimeout(function(){
+                    notification.classList.remove("show");
+                }, 3000);
             }
         });
     });
+
+    function updateCartDropdown() {
+    $.ajax({
+        url: '{% url "carts:update-cart-dropdown" %}',  // The new view for updating the cart dropdown
+        type: 'GET',
+        success: function(response) {
+            // Update cart count
+            // $('.cart_trigger .cart_count').text(response.cart_count);
+            
+            // Update cart items list
+            $('.cart_box .cart_list').html(response.cart_list_html);
+            
+            // Update cart subtotal
+            // $('.cart_footer .cart_total .cart_price').text('$' + response.cart_subtotal);
+        },
+        error: function(xhr, errmsg, err) {
+            console.log("Error updating cart dropdown");
+        }
+    });
+}
 </script>
 {% endblock script %}

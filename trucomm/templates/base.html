@@ -144,7 +144,7 @@
                                 </form>
                             </div><div class="search_overlay"></div>
                         </li>
-                        <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#" data-bs-toggle="dropdown"><i class="linearicons-cart"></i>{% if user.is_authenticated %}{% block cart_count %} {% endblock cart_count %}{% endif %}</a>
+                        <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="{% url 'carts:show-cart' %}" data-bs-toggle="dropdown"><i class="linearicons-cart"></i>{% if user.is_authenticated %}{% block cart_count %} {% endblock cart_count %}{% endif %}</a>
                             {% if user.is_authenticated %}
                             <div class="cart_box dropdown-menu dropdown-menu-right">
                                 <div class="cart_list">
